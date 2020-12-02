@@ -22,7 +22,7 @@ import glob
 
 def compute_STARS(HitList): 
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()      
     STARSDir = config['STARSDir']
     thr = config['thr_STARS']
@@ -63,7 +63,7 @@ def compute_STARS(HitList):
     os.system(STARS_cmd)
     # Extracting statistics
     STARS_output = glob.glob('counts_STARSOutput*.txt')[0]
-    STARS = pandas.read_table(STARS_output, sep='\t')
+    STARS = pandas.read_csv(STARS_output, sep='\t')
     geneList_s = list(STARS['Gene Symbol'])
     metric_s = list(STARS['STARS Score'])
     metric_pval_s = list(STARS['p-value'])               
@@ -86,4 +86,3 @@ def compute_STARS(HitList):
     os.system('rm '+STARS_output)
     # Return output
     return metric, metric_pval, sig
-    return 

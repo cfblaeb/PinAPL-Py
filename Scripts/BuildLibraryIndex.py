@@ -27,7 +27,7 @@ def BuildBowtieIndex():
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
     bw2Dir = config['bw2Dir']    
@@ -46,7 +46,7 @@ def BuildBowtieIndex():
     print('Converting library to fasta format ...') 
     os.chdir(LibDir)
     LibCols = ['gene','ID','seq']
-    LibFile = pd.read_table(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
+    LibFile = pd.read_csv(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
     seq = list(LibFile['seq'])
     IDs = list(LibFile['ID'])    
     with open('library.fasta','w') as library_fasta:

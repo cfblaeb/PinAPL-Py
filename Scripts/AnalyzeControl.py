@@ -34,7 +34,7 @@ def EstimateControlCounts():
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     delta = config['delta']
     ScriptsDir = config['ScriptsDir']
@@ -54,7 +54,7 @@ def EstimateControlCounts():
     os.chdir(sgRNAReadCountDir)
     ControlSamples = [d for d in os.listdir(sgRNAReadCountDir) if 'Control' in d and \
         'normalized' in d and '_avg' not in d]
-    CountFile = pd.read_table(ControlSamples[0], sep = '\t', names=['sgID','gene','counts'])
+    CountFile = pd.read_csv(ControlSamples[0], sep = '\t', names=['sgID','gene','counts'])
     sgIDs = list(CountFile['sgID'])
     genes = list(CountFile['gene'])
     L = len(CountFile)
@@ -66,7 +66,7 @@ def EstimateControlCounts():
     else:
         for filename in ControlSamples:
             controlsample = filename[0:-27]
-            CountFile = pd.read_table(filename, sep='\t',names=['sgID','gene','counts'])
+            CountFile = pd.read_csv(filename, sep='\t',names=['sgID','gene','counts'])
             counts = list(CountFile['counts'])
             CtrlCounts_df[controlsample] = counts
     

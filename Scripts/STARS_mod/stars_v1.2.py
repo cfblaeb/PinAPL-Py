@@ -86,13 +86,13 @@ def get_qval(val_list):
 if __name__ == '__main__':
     args = get_parser().parse_args()
     inputfile = args.input_file
-    input_df = pd.read_table(inputfile)
+    input_df = pd.read_csv(inputfile)
     cols = list(input_df.columns)[1:]
     cols = [re.sub('[^a-zA-Z0-9 \n\.]', '_', x) for x in cols]
     cols.insert(0,'Spacer Sequence')
     input_df.columns = cols
     cols_iter = cols[1:]
-    ref = pd.read_table(args.chip_file)
+    ref = pd.read_csv(args.chip_file)
     ref_colnames = list(ref.columns)
     ref_colnames[0:2] = ['Spacer Sequence', 'Gene Symbol']
     ref.columns = ref_colnames
@@ -163,7 +163,7 @@ if __name__ == '__main__':
                     #sp_stars.append(log_score)
                     w.writerow((gene, length_sps, all_ranks, spacer_list,spacer_rank, log_score, avg))
 
-        sp_stars = pd.read_table(outputfile)
+        sp_stars = pd.read_csv(outputfile)
         sp_stars = sp_stars.sort_values(by='STARS Score', ascending=False)
         stars_score = list(sp_stars['STARS Score'])
         if len(stars_score) == 0:

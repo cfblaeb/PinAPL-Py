@@ -34,7 +34,7 @@ def Repl_Scatterplot(Repl1,Repl2,GOI='none',Annot='none',NonT='none',Transp='non
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
     WorkingDir = config['WorkingDir'] 
@@ -74,10 +74,10 @@ def Repl_Scatterplot(Repl1,Repl2,GOI='none',Annot='none',NonT='none',Transp='non
     os.chdir(sgRNAReadCountDir)
     colnames = ['sgRNA','gene','counts']    
     filename1 = Repl1+'_GuideCounts_normalized.txt'
-    ListFile1 = pd.read_table(filename1, sep='\t',low_memory=False,names=colnames)    
+    ListFile1 = pd.read_csv(filename1, sep='\t',low_memory=False,names=colnames)
     ListFile1 = ListFile1.sort_values('sgRNA')    
     filename2 = Repl2+'_GuideCounts_normalized.txt'
-    ListFile2 = pd.read_table(filename2, sep='\t',low_memory=False,names=colnames)
+    ListFile2 = pd.read_csv(filename2, sep='\t',low_memory=False,names=colnames)
     ListFile2 = ListFile2.sort_values('sgRNA')    
     sgIDs = list(ListFile1['sgRNA'].values)
     genes = list(ListFile1['gene'].values)  

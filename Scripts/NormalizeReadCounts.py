@@ -30,7 +30,7 @@ def Normalization():
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
@@ -61,7 +61,7 @@ def Normalization():
         os.chdir(sgRNAReadCountDir) 
         for filename in FileNames_u:
             print('Processing file '+filename+' ...') 
-            GuideCounts = pandas.read_table(filename,sep='\t',names=colnames_u)
+            GuideCounts = pandas.read_csv(filename,sep='\t',names=colnames_u)
             L = len(GuideCounts)
             sgIDs = list(GuideCounts['sgRNA'])        
             geneIDs = list(GuideCounts['gene'])                            
@@ -81,7 +81,7 @@ def Normalization():
         os.chdir(GeneReadCountDir) 
         for filename in FileNames_g:
             print('Processing file '+filename+' ...')
-            GeneCounts = pandas.read_table(filename,sep='\t',names=colnames_g)
+            GeneCounts = pandas.read_csv(filename,sep='\t',names=colnames_g)
             G = len(GeneCounts)            
             geneIDs = list(GeneCounts['gene'])
             ReadsPerGene = list(GeneCounts['counts'])
@@ -103,7 +103,7 @@ def Normalization():
         os.chdir(sgRNAReadCountDir)       
         TotalCounts = list()
         for filename in FileNames_u:
-            SampleFile = pandas.read_table(filename, sep='\t',names=colnames_u)
+            SampleFile = pandas.read_csv(filename, sep='\t',names=colnames_u)
             x = list(SampleFile['counts'])
             TotalCounts.append(numpy.sum(x))
         MeanCount = numpy.mean(TotalCounts)
@@ -111,7 +111,7 @@ def Normalization():
         os.chdir(sgRNAReadCountDir)
         for filename in FileNames_u:
             print('Processing file '+filename+' ...')             
-            GuideCounts = pandas.read_table(filename,sep='\t',names=colnames_u)
+            GuideCounts = pandas.read_csv(filename,sep='\t',names=colnames_u)
             L = len(GuideCounts)
             sgIDs = list(GuideCounts['sgRNA'])        
             geneIDs = list(GuideCounts['gene'])                            
@@ -131,7 +131,7 @@ def Normalization():
         os.chdir(GeneReadCountDir)
         for filename in FileNames_g:
             print('Processing file '+filename+' ...')
-            GeneCounts = pandas.read_table(filename,sep='\t',names=colnames_g)
+            GeneCounts = pandas.read_csv(filename,sep='\t',names=colnames_g)
             G = len(GeneCounts)
             geneIDs = list(GeneCounts['gene'])                            
             ReadsPerGene = list(GeneCounts['counts'])
@@ -153,7 +153,7 @@ def Normalization():
         # Establish data frame
         os.chdir(sgRNAReadCountDir)
         filename = FileNames_u[0]
-        SampleFile = pandas.read_table(filename, sep='\t',names=colnames_u)
+        SampleFile = pandas.read_csv(filename, sep='\t',names=colnames_u)
         sgIDs = list(SampleFile['sgRNA'])
         geneIDs = list(SampleFile['gene'])
         L = len(sgIDs)        
@@ -167,7 +167,7 @@ def Normalization():
         print('Computing geometric means ...')
         for filename in FileNames_u:
             sample = filename[0:-16]
-            SampleFile = pandas.read_table(filename, sep='\t',names=colnames_u)
+            SampleFile = pandas.read_csv(filename, sep='\t',names=colnames_u)
             x = list(SampleFile['counts'])
             RawCounts[sample] = x
             SizeFactors[sample] = [x[k] if x[k]>0 else x[k]+eps for k in range(L)]
@@ -208,7 +208,7 @@ def Normalization():
         os.chdir(GeneReadCountDir)  
         for filename in FileNames_g:
             sample = filename[0:-15]
-            GeneCounts = pandas.read_table(filename,sep='\t',names=colnames_g)
+            GeneCounts = pandas.read_csv(filename,sep='\t',names=colnames_g)
             G = len(GeneCounts)
             geneIDs = list(GeneCounts['gene'])
             ReadsPerGene = list(GeneCounts['counts'])                    

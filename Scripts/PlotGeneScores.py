@@ -36,7 +36,7 @@ def GeneScoreScatterplot(sample,GOI='none'):
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     GeneMetric = config['GeneMetric']
     RankingsDir = config['GeneDir']
@@ -52,7 +52,7 @@ def GeneScoreScatterplot(sample,GOI='none'):
     os.chdir(RankingsDir)
     print('Reading gene ranking data....')
     filename = glob.glob(sample+'*_'+GeneMetric+'_GeneList.txt')[0]
-    X = pandas.read_table(filename, sep='\t')
+    X = pandas.read_csv(filename, sep='\t')
     X0 = X.sort_values(['gene'])        # sort gene table alphabetically
     genes = list(X0['gene'])    
     G = len(genes)

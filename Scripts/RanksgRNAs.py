@@ -8,19 +8,13 @@ Created on Sat Apr 30 14:22:06 2016
 # Find candidate sgRNAs
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
 import pandas
-import numpy
 import scipy
 from scipy import stats
-from decimal import *
-import os
-import glob
-import sys
+#from decimal import *
 from statsmodels.sandbox.stats.multicomp import multipletests
 import time
 import yaml
-import warnings
 import sys
 from pvalPlots import *
 
@@ -35,12 +29,8 @@ def PrepareGuideRanking(sample):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml', 'r'), Loader=yaml.FullLoader)
     ScriptsDir = config['ScriptsDir']    
-    WorkingDir = config['WorkingDir']
-    AnalysisDir = config['AnalysisDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
     CtrlDir = config['ControlDir']
     ListDir = config['sgRNARanksDir']
@@ -51,7 +41,7 @@ def PrepareGuideRanking(sample):
     SheetFormat = config['HitListFormat']
     delta = config['delta']
     pvalDir = config['pvalDir_sgRNA']
-    zScoreDir = config['zScoreDir_sgRNA']
+
     res = config['dpi']
     svg = config['svg']
     
@@ -60,7 +50,7 @@ def PrepareGuideRanking(sample):
     # --------------------------------   
     print('Loading sgRNA read counts ...')     
     os.chdir(CtrlDir)
-    Ctrl_File = pandas.read_table(CtrlCounts_Filename, sep='\t')
+    Ctrl_File = pandas.read_csv(CtrlCounts_Filename, sep='\t')
     Model = Ctrl_File['Model'][0]
     sgIDs = list(Ctrl_File['sgID'])
     genes = list(Ctrl_File['gene'])
@@ -71,9 +61,9 @@ def PrepareGuideRanking(sample):
     n = list(Ctrl_File['n'])
     p = list(Ctrl_File['p'])    
     os.chdir(sgRNAReadCountDir)
-    colnames = ['sgID','gene','counts']
+    colnames = ['sgID', 'gene', 'counts']
     filename = sample+'_GuideCounts_normalized.txt'
-    SampleFile = pandas.read_table(filename, sep='\t',names=colnames)
+    SampleFile = pandas.read_csv(filename, sep='\t', names=colnames)
     x = list(SampleFile['counts'])
      
     # -----------------------------------------------
@@ -82,7 +72,7 @@ def PrepareGuideRanking(sample):
     print('Computing fold-changes ...')
     fc = list()
     for k in range(L):
-        if x[k]==0 or mu[k]==0:
+        if x[k] == 0 or mu[k] == 0:
             fc.append((x[k]+delta)/(mu[k]+delta))
         else:
             fc.append(x[k]/mu[k])     
@@ -90,16 +80,12 @@ def PrepareGuideRanking(sample):
     # -----------------------------------------------
     # Compute p-values 
     # -----------------------------------------------              
-    if Model == 'none':        
-    # -----------------------------------------------------------
-        print('WARNING: Zero variance or no control replicates! Cannot compute p-values ...')   
+    if Model == 'none':
+        print('WARNING: Zero variance or no control replicates! Cannot compute p-values ...')
         pval = ['N/A' for k in range(L)]
-        pval0 = ['N/A' for k in range(L)]
-        significant = ['N/A' for k in range(L)]     
-    # -----------------------------------------------------------
+        significant = ['N/A' for k in range(L)]
     elif ScreenType == 'enrichment':       # enrichment screen
-    # -----------------------------------------------------------
-        pval = list(); 
+        pval = list()
         print('Computing p-values ('+Model+' model) ...')
         # one-sided p-value
         if Model == 'Neg. Binomial':
@@ -108,20 +94,16 @@ def PrepareGuideRanking(sample):
         elif Model == 'Poisson':
             for k in range(L):
                 pval.append(1 - scipy.stats.poisson.cdf(x[k],sigma2[k]))
-    # -----------------------------------------------------------                 
-    elif ScreenType == 'depletion':       # depletion screen        
-    # -----------------------------------------------------------
-        pval = list();
+    elif ScreenType == 'depletion':       # depletion screen
+        pval = list()
         print('Computing p-values ('+Model+' model) ...')
         # one-sided p-value
         if Model == 'Neg. Binomial':
             for k in range(L):         
                 pval.append(scipy.stats.nbinom.cdf(x[k],n[k],p[k]))
         elif Model == 'Poisson':
-                pval.append(scipy.stats.poisson.cdf(x[k],sigma2[k]))        
-    # -----------------------------------------------------------                  
+                pval.append(scipy.stats.poisson.cdf(x[k],sigma2[k]))
     else:                           # error in scree type
-    # -----------------------------------------------------------   
         print('### ERROR: Check spelling of ScreenType in configuration file! ###')
 
     # -----------------------------------------------
@@ -132,7 +114,7 @@ def PrepareGuideRanking(sample):
         print('Multiple tests correction ...')
         pval_0 = list()
         for k in range(L):
-            condition1 = x[k]!=0 or mu[k]!=0        # prevent artificial peak at p=0.5 because of fc=1
+            condition1 = x[k] != 0 or mu[k] != 0        # prevent artificial peak at p=0.5 because of fc=1
             condition2 = ~numpy.isnan(pval[k])      # remove nan (shouldn't have any though...)
             if condition1 and condition2:            
                 pval_0.append(pval[k])
@@ -151,7 +133,7 @@ def PrepareGuideRanking(sample):
         # Plots
         print('Plotting p-value histogram ...')
         PlotTitle = 'sgRNA '+ScreenType.capitalize()
-        pvalHist(pval_0,pvalDir,sample,res,svg,'#0be52c',PlotTitle)
+        pvalHist(pval_0, pvalDir, sample, res, svg, '#0be52c', PlotTitle)
 
                
     # -----------------------------------------------
@@ -205,4 +187,4 @@ def PrepareGuideRanking(sample):
     
 if __name__ == "__main__":
     input1 = sys.argv[1]    
-    PrepareGuideRanking(input1) 
+    PrepareGuideRanking(input1)

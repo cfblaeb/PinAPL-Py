@@ -30,7 +30,7 @@ def ReadAlignment(sample):
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
     WorkingDir = config['WorkingDir']
@@ -56,7 +56,7 @@ def ReadAlignment(sample):
     # ------------------------------------------------  
     os.chdir(LibDir)
     LibCols = ['gene','ID','seq']
-    LibFile = pandas.read_table(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
+    LibFile = pandas.read_csv(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
     LibFile = LibFile.sort_values(['gene','ID'])    
     sgIDs = list(LibFile['ID'])
     global L

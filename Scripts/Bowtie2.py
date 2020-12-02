@@ -23,7 +23,7 @@ def RunBowtie2(ReadsFilename0,TempDataDir,AlnDir,bw2Dir,IndexDir,L_bw,N_bw,i_bw)
     os.system('cp ' + ReadsFilename0 + ' ' + IndexDir)
     os.chdir(IndexDir)
     num_cores = multiprocessing.cpu_count()
-    bw2_cmdline = bw2Dir+'bowtie2 --local -L '+str(L_bw)+' -N '+str(N_bw)+' -i '+str(i_bw) +\
+    bw2_cmdline = bw2Dir+'bowtie2 -L '+str(L_bw)+' -N '+str(N_bw)+' -i '+str(i_bw) +\
         ' -q -x Library -U ' + ReadsFilename0 + ' -S ' + bw2output + ' -p '+str(num_cores)
     os.system(bw2_cmdline)
     os.system('rm ' + ReadsFilename0)

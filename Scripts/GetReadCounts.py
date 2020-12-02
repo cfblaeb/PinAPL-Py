@@ -9,7 +9,7 @@ Created on Tue Dec  4 09:57:05 2018
 # Perform Read counting, classification and normalization
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
+from __future__ import division  # floating point division by default
 import sys
 import yaml
 import time
@@ -19,16 +19,16 @@ import pandas
 from collections import Counter
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib
-matplotlib.use('Agg') 
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy
 import pysam
 from matplotlib.ticker import FuncFormatter
 
 
-
 def millions(x, pos):
     return '%1.1fM' % (x*1e-6)
+
 
 def millions2(x, pos):
     return '%1.2fM' % (x*1e-6)    
@@ -44,29 +44,19 @@ def CountReads(sample):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
-    configFile.close()
-    WorkingDir = config['WorkingDir']    
-    ScriptsDir = config['ScriptsDir']
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
+    WorkingDir = config['WorkingDir']
     LibDir = config['LibDir']    
     LibFilename = config['LibFilename']
     LibFormat = LibFilename[-3:]
-    if LibFormat == 'tsv':
-        libsep = '\t'
-    elif LibFormat == 'csv':
-        libsep = ','    
+    libsep = '\t' if LibFormat == 'tsv' else ','
     OutputDir = config['AlnQCDir']+sample   
     AlnStemDir = config['AlignDir']
-    AlnDir = AlnStemDir+sample+'/'    
-    minN = config['Cutoff']
+    AlnDir = AlnStemDir+sample+'/'
     Theta = config['Theta']
-    AS_min = config['AS_min']    
-    N0 = 1000000
+    AS_min = config['AS_min']
     res = config['dpi']
     svg = config['svg']
-    AlnOutput = config['AlnOutput']
-    keepCutReads = config['keepCutReads']
     GuideCount_Suffix = '_GuideCounts.txt'
     logfilename = sample+'_AlignmentResults.txt'
     L_bw = config['L_bw']
@@ -78,13 +68,12 @@ def CountReads(sample):
     # Read library
     # ------------------------------------------------  
     os.chdir(LibDir)
-    LibCols = ['gene','ID','seq']
-    LibFile = pandas.read_table(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
+    LibCols = ['gene', 'ID', 'seq']
+    LibFile = pandas.read_csv(LibFilename, sep=libsep, skiprows=1, names=LibCols)
     LibFile = LibFile.sort_values(['gene','ID'])    
     sgIDs = list(LibFile['ID'])
-    global L; L = len(sgIDs)
-    global geneIDs; geneIDs = list(LibFile['gene'])
-    G = len(set(geneIDs))
+    L = len(sgIDs)
+    geneIDs = list(LibFile['gene'])
 
     # ------------------------------------------------
     # Get sample read file
@@ -113,10 +102,13 @@ def CountReads(sample):
         os.system('samtools view -h '+bam_file+' > '+sam_file)
     else:
         print('### ERROR: No alignment file present ###')
-    bw2sam = pysam.AlignmentFile(sam_file,'rb')
+    bw2sam = pysam.AlignmentFile(sam_file, 'rb')
     print('Applying matching threshold ...')
     print('Applying ambiguity threshold ...')       
-    NFail = 0; NUnique = 0; NTol = 0; NAmb = 0
+    NFail = 0
+    NUnique = 0
+    NTol = 0
+    NAmb = 0
     mapQ = list()
     primScore = list()
     secScore = list()
@@ -162,14 +154,13 @@ def CountReads(sample):
             secScore.append(0)
             NFail += 1
             AlnStatus.append('Fail')
-    bw2sam.close();          
+    bw2sam.close()
     NReads = NTol + NAmb + NUnique + NFail
     FracUnique = round(NUnique/NReads*1000)/10    
     FracTol = round(NTol/NReads*1000)/10
     FracAmb = round(NAmb/NReads*1000)/10
     FracFail = round(NFail/NReads*1000)/10         
-    print('*** Successfully mapped reads: '\
-        +str(NUnique+NTol)+' ('+str(FracUnique+FracTol)+'%) ***')
+    print('*** Successfully mapped reads: ' +str(NUnique+NTol)+' ('+str(FracUnique+FracTol)+'%) ***')
         
     # ------------------------------------------
     # Mapping statistics
@@ -305,7 +296,6 @@ def CountReads(sample):
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed [hours]: ' + '%.3f' % time_elapsed +'\n') 
-        
         
 
 if __name__ == "__main__":

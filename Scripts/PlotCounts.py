@@ -34,7 +34,7 @@ def GOI_Scatterplot(sample,GOI='none',Annot='none',NonT='none',Transp='none'):
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
     WorkingDir = config['WorkingDir'] 
@@ -73,7 +73,7 @@ def GOI_Scatterplot(sample,GOI='none',Annot='none',NonT='none',Transp='none'):
     print('Reading sgRNA read counts ...')    
     os.chdir(sgRNARanksDir)
     filename = glob.glob(sample+'_*sgRNAList.txt')[0]
-    sgRNARanking = pd.read_table(filename, sep='\t')       
+    sgRNARanking = pd.read_csv(filename, sep='\t')
     sgIDs = list(sgRNARanking['sgRNA'].values)
     genes = list(sgRNARanking['gene'].values)  
     L = len(sgIDs)

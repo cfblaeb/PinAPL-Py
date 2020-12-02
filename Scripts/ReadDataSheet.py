@@ -11,9 +11,10 @@ import os
 import yaml
 import pandas
 
+
 def GetSamples():
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     WorkingDir = config['WorkingDir']     
     ScriptsDir = config['ScriptsDir']

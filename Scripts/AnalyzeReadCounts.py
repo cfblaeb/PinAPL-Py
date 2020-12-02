@@ -41,12 +41,10 @@ def AnalyzeCounts(sample):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     ScriptsDir = config['ScriptsDir']    
-    DataDir = config['DataDir']
-    AnalysisDir = config['AnalysisDir']
+    #DataDir = config['DataDir']
+    #AnalysisDir = config['AnalysisDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
     GeneReadCountDir = config['GeneReadCountDir']
     OutputDir = config['CountQCDir']+sample
@@ -60,13 +58,13 @@ def AnalyzeCounts(sample):
     os.chdir(sgRNAReadCountDir)
     colnames = ['ID','gene','counts']
     GuideFileName = sample+'_GuideCounts_normalized.txt'
-    GuideFile = pd.read_table(GuideFileName, sep='\t', names=colnames)
+    GuideFile = pd.read_csv(GuideFileName, sep='\t', names=colnames)
     ReadsPerGuide = list(GuideFile['counts'])
     L = len(ReadsPerGuide)   
     os.chdir(GeneReadCountDir)
     colnames = ['gene','counts']    
     GeneFileName = sample+'_GeneCounts_normalized.txt'
-    GeneFile = pd.read_table(GeneFileName, sep='\t', names=colnames)
+    GeneFile = pd.read_csv(GeneFileName, sep='\t', names=colnames)
     ReadsPerGene = list(GeneFile['counts'])
     sgID = list(GuideFile['ID'].values)    
     gene = list(GuideFile['gene'].values)    
@@ -128,7 +126,7 @@ def AnalyzeCounts(sample):
     plt.setp(bp['whiskers'], color='black')
     for patch in bp['boxes']:
         patch.set(facecolor='#92fcae') 
-    ax0.set_xticks([''])
+    #ax0.set_xticks([''])
     ax0.set_ylabel('Counts per sgRNA', fontsize=11)
     ax0.tick_params(labelsize=11)
     # Reads per gene: Boxplot
@@ -138,7 +136,7 @@ def AnalyzeCounts(sample):
     plt.setp(bp['whiskers'], color='black')
     for patch in bp['boxes']:
         patch.set(facecolor='#9de4f9') 
-    ax2.set_xticks([''])
+    #ax2.set_xticks([''])
     ax2.set_ylabel('Counts per Gene', fontsize=11)
     ax2.tick_params(labelsize=11)
     print('Generating histograms...')

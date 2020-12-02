@@ -15,45 +15,54 @@ def PrintStatus_Header():
     print('Launching PinAPL-Py v2.911')
     print('P. Spahn et al., UC San Diego (10/2020)')
     print('**************************************************')
-    
+
+
 def PrintStatus_SubHeader(msg):
     print('\n')
     print('**************************************************')
     print(msg)
     print('**************************************************')
 
+
 def PrintStatus_Done(msg):
     print(msg)
     print('\n')
 
+
 def PrintStatus_ProcessSample(sample):
     print('Processing sample '+sample+' ... ')
+
 
 def PrintStatus_CombineReplicates():
     print('Combining gene ranks across replicates ... ')
 
+
 def PrintStatus_SkipTrim():
     print('Alignment folder found. Skipping read trimming ... ')
 
+
 def PrintStatus_SkipAlignment(sample):
     print('Alignment folder found for sample '+sample+'. Skipping alignment ... ')
-    
+
+
 def PrintStatus_SkipAlnQC(sample):
     print('Read count folder found for sample '+sample+'. Skipping read counting ... ')    
 
+
 def PrintStatus_SkipSeqQC():
     print('Sequence quality folder found. Skipping quality check ... ')
+
 
 def PrintStatus_AllDone():
     print('\n')
     print('**************************************************')
     print('PinAPL-Py completed.')  
 
+
 def PrintStatus_TimeStamp(msg):
     print(msg)
 
 
-   
 if __name__ == "__main__":
     input1 = sys.argv[1]
     input2 = sys.argv[2]    

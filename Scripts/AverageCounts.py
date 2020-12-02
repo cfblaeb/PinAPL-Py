@@ -24,7 +24,7 @@ def AverageReadCounts(treatment):
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
@@ -47,7 +47,7 @@ def AverageReadCounts(treatment):
         print('Averaging read counts over '+str(R)+' replicates ...')
         AllGuideCounts = pandas.DataFrame()  
         for filename in ReplFiles:            
-            CountsFile = pandas.read_table(filename, sep='\t',names=colnames_s)
+            CountsFile = pandas.read_csv(filename, sep='\t',names=colnames_s)
             CountsFile = CountsFile.sort_values(['gene','sgRNA'])
             sgIDs = list(CountsFile['sgRNA'])        
             genes = list(CountsFile['gene'])                
@@ -76,7 +76,7 @@ def AverageReadCounts(treatment):
     if R >= 2:
         AllGeneCounts = pandas.DataFrame()
         for filename in ReplFiles:
-            CountsFile = pandas.read_table(filename, sep='\t',names=colnames_g)
+            CountsFile = pandas.read_csv(filename, sep='\t',names=colnames_g)
             CountsFile = CountsFile.sort_values(['gene'])
             genes = list(CountsFile['gene'])                
             counts = list(CountsFile['counts'])    

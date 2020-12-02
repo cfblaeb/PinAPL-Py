@@ -18,7 +18,7 @@ def LibrarySanityCheck():
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     LibDir = config['LibDir']
     LibFilename = config['LibFilename']
@@ -33,7 +33,7 @@ def LibrarySanityCheck():
     # ----------------------------------
     os.chdir(LibDir)
     LibCols = ['gene','ID','seq']
-    LibFile = pandas.read_table(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
+    LibFile = pandas.read_csv(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
     GeneNames = list(LibFile['gene'])
     ID = list(LibFile['ID'])
     seq = list(LibFile['seq'])

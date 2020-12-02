@@ -9,14 +9,14 @@
 ScreenType: 'enrichment'              # type of screen ['enrichment'/'depletion']
 
 # LIBRARY PARAMETERS
-LibFilename: 'GeCKOv21_Human.tsv'        # filename of library spreadsheet
-seq_5_end: 'TCTTGTGGAAAGGACGAAACACCN'       # 5'-sequence adapter
-NonTargetPrefix: 'NonTargeting'             # prefix for non-targeting sgRNAs in library
-NumGuidesPerGene: 6                     # number of sgRNAs per gene 
+LibFilename: 'vf_grna.csv'        # filename of library spreadsheet
+seq_5_end: 'TCTTGTGGAAAGGACGAAACACCG'       # 5'-sequence adapter
+NonTargetPrefix: 'NT_'             # prefix for non-targeting sgRNAs in library
+NumGuidesPerGene: 5                     # number of sgRNAs per gene 
                                        
 # ANALYSIS OPTIONS
-GeneMetric: 'SigmaFC'                   # metric for gene ranking ['SigmaFC'/'AvgLogFC'/'aRRA'/'STARS']
-padj: 'sidak'                          # method for p-value adjustment ['fdr_bh'/'sidak'/'bonferroni']
+GeneMetric: 'aRRA'                   # metric for gene ranking ['SigmaFC'/'AvgLogFC'/'aRRA'/'STARS']
+padj: 'fdr_bh'                          # method for p-value adjustment ['fdr_bh'/'sidak'/'bonferroni']
 alpha_s: 0.01                            # significance threshold (sgRNAs enrichment/depletion)
 alpha_g: 0.01                            # significance threshold (gene ranking)
 Normalization: 'total'                    # normalization of read counts ['cpm'/'size'/'total']
@@ -24,7 +24,7 @@ ClusterBy: 'variance'                   # clustering criterion ['variance'/'coun
 RoundCount: False                       # round counts after normalization [True/False]
 repl_avg: 'median'                      # average counts between replicates ['mean'/'median']
 sgRNALength: 20                         # sgRNA length [bp]
-AS_min: 40                              # alignment matching threshold 
+AS_min: 0                              # alignment matching threshold 
 Theta: 2                                # alignment ambiguity threshold
 Np: 10000                               # number of permutations for gene ranking p-values
 w_SigmaFC: [0,1,2,3,4,5,6]              # weighing function for SigmaFC score
@@ -62,39 +62,39 @@ fontsize_p: 14                          # fontsize in heatmap image
 marginsize: 10                          # size of margin in heatmap image
 
 # DIRECTORIES
-WorkingDir: '/workingdir/'
-DataDir: '/workingdir/Data/'
-TempDataDir: '/workingdir/TempData/'
-LibDir: '/workingdir/Library/'
-IndexDir: '/workingdir/Library/Bowtie2_Index/'
-ScriptsDir: '/opt/PinAPL-Py/Scripts/'
-AlignDir: '/workingdir/Alignments/'
-AnalysisDir: '/workingdir/Analysis/'
-TrimLogDir: '/workingdir/Analysis/01_Alignment_Results/Read_Trimming/'
-sgRNARanksDir: '/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_Ranking/'
-GeneDir: '/workingdir/Analysis/03_GeneRanking_Results/Gene_Ranking/'
-ControlDir: '/workingdir/Analysis/02_sgRNA-Ranking_Results/ControlSample_Analysis/'
-HeatDir: '/workingdir/Analysis/02_sgRNA-Ranking_Results/Heatmap/'
-AlnQCDir: '/workingdir/Analysis/01_Alignment_Results/Alignment_Statistics/'
-sgRNAReadCountDir: '/workingdir/Analysis/01_Alignment_Results/ReadCounts_per_sgRNA/'
-GeneReadCountDir: '/workingdir/Analysis/01_Alignment_Results/ReadCounts_per_Gene/'
-CountQCDir: '/workingdir/Analysis/02_sgRNA-Ranking_Results/ReadCount_Distribution/'
-ScatterDir: '/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_Scatterplots/'
-DensityDir: '/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_Densities/'
-GenePlotDir: '/workingdir/Analysis/03_GeneRanking_Results/GeneScore_Scatterplots/'
-CorrelDir: '/workingdir/Analysis/02_sgRNA-Ranking_Results/Replicate_Correlation/'
-HiLiteDir2: '/workingdir/Analysis/02_sgRNA-Ranking_Results/Replicate_Correlation/Highlighted_Genes/'
-EffDir: '/workingdir/Analysis/03_GeneRanking_Results/sgRNA_Efficacy/'
-DepthDir: '/workingdir/Analysis/01_Alignment_Results/Read_Depth/'
-SeqQCDir: '/workingdir/Analysis/01_Alignment_Results/Sequence_Quality/'
-pvalDir_sgRNA: '/workingdir/Analysis/02_sgRNA-Ranking_Results/p-value_Distribution/' 
-pvalDir_genes: '/workingdir/Analysis/03_GeneRanking_Results/p-value_Distribution/' 
-zScoreDir_sgRNA: '/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_z-Scores/'
-VolcanoDir_sgRNA: '/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_VolcanoPlots/'
-LogFileDir: '/workingdir/Analysis/00_LogFile/' 
+WorkingDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/'
+DataDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Data/'
+TempDataDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/TempData/'
+LibDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Library/'
+IndexDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Library/Bowtie2_Index/'
+ScriptsDir: '/home/laeb/PycharmProjects/PinAPL-Py/Scripts/'
+AlignDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Alignments/'
+AnalysisDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/'
+TrimLogDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/01_Alignment_Results/Read_Trimming/'
+sgRNARanksDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_Ranking/'
+GeneDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/03_GeneRanking_Results/Gene_Ranking/'
+ControlDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/ControlSample_Analysis/'
+HeatDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/Heatmap/'
+AlnQCDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/01_Alignment_Results/Alignment_Statistics/'
+sgRNAReadCountDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/01_Alignment_Results/ReadCounts_per_sgRNA/'
+GeneReadCountDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/01_Alignment_Results/ReadCounts_per_Gene/'
+CountQCDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/ReadCount_Distribution/'
+ScatterDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_Scatterplots/'
+DensityDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_Densities/'
+GenePlotDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/03_GeneRanking_Results/GeneScore_Scatterplots/'
+CorrelDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/Replicate_Correlation/'
+HiLiteDir2: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/Replicate_Correlation/Highlighted_Genes/'
+EffDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/03_GeneRanking_Results/sgRNA_Efficacy/'
+DepthDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/01_Alignment_Results/Read_Depth/'
+SeqQCDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/01_Alignment_Results/Sequence_Quality/'
+pvalDir_sgRNA: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/p-value_Distribution/' 
+pvalDir_genes: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/03_GeneRanking_Results/p-value_Distribution/' 
+zScoreDir_sgRNA: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_z-Scores/'
+VolcanoDir_sgRNA: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/02_sgRNA-Ranking_Results/sgRNA_VolcanoPlots/'
+LogFileDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Analysis/00_LogFile/' 
 bw2Dir: '/usr/bin/'
-CutAdaptDir: '/root/.local/bin/'    
-STARSDir: '/opt/PinAPL-Py/Scripts/STARS_mod/'
+CutAdaptDir: '/usr/bin/'    
+STARSDir: '/home/laeb/PycharmProjects/PinAPL-Py/workingdir/Scripts/STARS_mod/'
 
 # SCRIPT FILENAMES
 SanityScript: 'CheckCharacters'

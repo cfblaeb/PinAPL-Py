@@ -28,7 +28,7 @@ def TopN_Clustering():
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     WorkingDir = config['WorkingDir']
     AnalysisDir = config['AnalysisDir']
@@ -56,7 +56,7 @@ def TopN_Clustering():
     colnames = ['sgRNA','gene','counts']
     for filename in Filenames:
         sample = filename[0:-27]    
-        CountsFile = pd.read_table(filename, sep='\t',names=colnames)
+        CountsFile = pd.read_csv(filename, sep='\t',names=colnames)
         sgIDs = list(CountsFile['sgRNA'])
         genes = list(CountsFile['gene'])                
         counts = list(CountsFile['counts'])    
@@ -71,8 +71,8 @@ def TopN_Clustering():
         # Compute variance
         print('Computing variance ...')
         L = len(sgIDs)
-        AC = AllCounts.iloc[:,2:].as_matrix()
-        Var = [numpy.var(AC[k,]) for k in range(L)]
+        AC = AllCounts.iloc[:, 2:].to_numpy()
+        Var = [numpy.var(AC[k, ]) for k in range(L)]
         # Insert into dataframe
         AllCounts['Variance'] = Var
         # Sort by highest variance
@@ -140,8 +140,7 @@ def TopN_Clustering():
     # Define command and arguments
     command = 'Rscript'
     path2script = ScriptsDir+'ClusterAnalysis_Heatmap.r'
-    args = [ClusterDir,OutputSheetname,str(delta),HeatmapFilename,\
-            str(width),str(height),str(fontsize),str(marginsize),str(svg)]  
+    args = [ClusterDir, OutputSheetname, str(delta), HeatmapFilename, str(width), str(height), str(fontsize), str(marginsize), str(svg)]
     cmd = [command, path2script] + args    
     # Run R script
     subprocess.check_output(cmd)
@@ -168,4 +167,4 @@ def TopN_Clustering():
     
     
 if __name__ == "__main__":
-    TopN_Clustering() 
+    TopN_Clustering()

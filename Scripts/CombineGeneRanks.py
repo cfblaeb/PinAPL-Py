@@ -24,7 +24,7 @@ def GeneRankCombination(treatment):
     # Get parameters    
     start = time.time()
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()    
     alpha = config['alpha_g']
     padj = config['padj']
@@ -41,7 +41,7 @@ def GeneRankCombination(treatment):
         treatment_files.sort()
         K = len(treatment_files)
         ResultTable = pandas.DataFrame()
-        X1 = pandas.read_table(treatment_files[0], sep='\t')
+        X1 = pandas.read_csv(treatment_files[0], sep='\t')
         G = len(X1)        
         # Read replicates
         chi = list(numpy.zeros(G))    
@@ -49,7 +49,7 @@ def GeneRankCombination(treatment):
         for treatment_file in treatment_files:
             k+=1   
             print('Reading '+treatment+' replicate '+str(k)+' ...')            
-            X = pandas.read_table(treatment_file, sep='\t')
+            X = pandas.read_csv(treatment_file, sep='\t')
             X0 = X.sort_values('gene',ascending=1)    
             genes = list(X0['gene'])
             ResultTable['gene'] = genes

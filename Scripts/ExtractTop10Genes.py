@@ -11,15 +11,16 @@ import yaml
 import pandas
 import glob
 
+
 def printTop10Genes(sample):
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     GeneDir = config['GeneDir']
     ScriptsDir = config['ScriptsDir']
     os.chdir(GeneDir)
     filename = glob.glob(sample+'*_GeneList.txt')[0]
-    GeneRanking = pandas.read_table(filename, sep='\t')
+    GeneRanking = pandas.read_csv(filename, sep='\t')
     sig = list(GeneRanking['significant'])
     if True in sig:
         S = sig.index(False)
@@ -39,13 +40,13 @@ def printTop10Genes(sample):
 
 def GetTop10Genes(sample):
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     GeneDir = config['GeneDir']
     ScriptsDir = config['ScriptsDir']
     os.chdir(GeneDir)
     filename = glob.glob(sample+'*_GeneList.txt')[0]
-    GeneRanking = pandas.read_table(filename, sep='\t')
+    GeneRanking = pandas.read_csv(filename, sep='\t')
     sig = list(GeneRanking['significant'])
     if True in sig:
         S = sig.index(False)

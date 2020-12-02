@@ -36,7 +36,7 @@ def PrepareHitList(sample):
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']    
     WorkingDir = config['WorkingDir']
@@ -59,7 +59,7 @@ def PrepareHitList(sample):
     # --------------------------------   
     print('Loading read counts ...')     
     os.chdir(CtrlDir)
-    Ctrl_File = pandas.read_table(CtrlCounts_Filename, sep='\t')
+    Ctrl_File = pandas.read_csv(CtrlCounts_Filename, sep='\t')
     Model = Ctrl_File['Model'][0]
     sgIDs = list(Ctrl_File['sgID'])
     genes = list(Ctrl_File['gene'])
@@ -72,7 +72,7 @@ def PrepareHitList(sample):
     os.chdir(InputDir)
     colnames = ['sgID','gene','counts']
     filename = glob.glob('*GuideCounts_0.txt')[0]
-    SampleFile = pandas.read_table(filename, sep='\t',names=colnames)
+    SampleFile = pandas.read_csv(filename, sep='\t',names=colnames)
     x = list(SampleFile['counts'])
      
     # -----------------------------------------------

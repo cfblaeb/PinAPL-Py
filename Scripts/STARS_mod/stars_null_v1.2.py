@@ -56,11 +56,11 @@ def sort_reindex(df, col, direction):
 if __name__ == '__main__':
     args = getParser().parse_args()
     inputfile = args.input_file
-    st_in = pd.read_table(inputfile)
+    st_in = pd.read_csv(inputfile)
     st_in = st_in[[0]]
     st_in.columns = ['Spacer Sequence']
     st_in['Score'] = range(1,len(st_in)+1)
-    ref = pd.read_table(args.chip_file)
+    ref = pd.read_csv(args.chip_file)
     ref_colnames = list(ref.columns)
     ref_colnames[0:2] = ['Spacer Sequence', 'Gene']
     ref.columns = ref_colnames

@@ -9,24 +9,19 @@ Created on Mon Oct 10 10:22:56 2016
 # =======================================================================
 # Imports
 import yaml
-import sys
 import os
 import pandas
+
 
 def RunSanityCheck():
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     LibDir = config['LibDir']
     LibFilename = config['LibFilename']
     LibFormat = LibFilename[-3:]
-    if LibFormat == 'tsv':
-        libsep = '\t'
-    elif LibFormat == 'csv':
-        libsep = ','
+    libsep = '\t' if LibFormat == 'tsv' else ','
     DataDir = config['DataDir']
     WorkingDir = config['WorkingDir']
       
@@ -34,13 +29,13 @@ def RunSanityCheck():
     # Replace non-printable characters from library (...these cause problems in PlotCount.py)
     # --------------------------------------------------------------------   
     os.chdir(LibDir)
-    LibCols = ['gene','ID','seq']
-    LibFile = pandas.read_table(LibFilename, sep = libsep, skiprows = 1, names = LibCols)
+    LibCols = ['gene', 'ID', 'seq']
+    LibFile = pandas.read_csv(LibFilename, sep=libsep, skiprows=1, names=LibCols)
     GeneNames = list(LibFile['gene'])
     ID = list(LibFile['ID'])
     seq = list(LibFile['seq']) 
     GeneNames0 = []
-    ID0 = []    
+    ID0 = []
     
     # --------------------------------------------------------------------
     # Define bad characters (library)
@@ -124,10 +119,7 @@ def RunSanityCheck():
     # -------------------------------------------------------------------- 
     if not BadLibCharFound and not BadFileCharFound and not BadSampleCharFound:
         print('No special characters found.')
-    
-    
 
 
-   
 if __name__ == "__main__":
     RunSanityCheck()

@@ -17,7 +17,7 @@ def RunCutadapt():
     start_total = time.time()  
     # Get parameters    
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()    
     DataDir = config['DataDir']
     TempDataDir = config['TempDataDir']
@@ -45,7 +45,7 @@ def RunCutadapt():
         LogFilename = 'cutadapt_'+ReadsFilename+'.txt'
         command = CutAdaptDir+'cutadapt -g '+seq_5_end\
                                 +' '+DataDir+ReadsFilename+' -o '+ReadsFilename0\
-                                +' -e '+str(CutErrorTol)+' -m '+str(R_min)+' -l '+str(sgLength)\
+                                +' -e '+str(CutErrorTol)+' -O 20 --trimmed-only -j 0 --rc -m '+str(R_min)+' -l '+str(sgLength)\
                                 +' 2>&1 > '+LogFilename
         subprocess.call(ScriptsDir+RunInBack+' "'+command+'" '+ReadsFilename+' cutadapt_status.log &',shell=True,\
             stdin=None, stdout=None, stderr=None, close_fds=True)

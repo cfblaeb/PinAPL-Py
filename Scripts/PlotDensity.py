@@ -9,7 +9,6 @@ Created on Thu May  9 16:29:08 2019
 # Density plot of sgRNA counts
 # =======================================================================
 # Imports 
-from __future__ import division # floating point division by default
 import os
 import pandas as pd
 import matplotlib
@@ -36,14 +35,11 @@ def DensityPlot(sample):
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
-    WorkingDir = config['WorkingDir'] 
-    AnalysisDir = config['AnalysisDir']
     sgRNARanksDir = config['sgRNARanksDir']
     DensityDir = config['DensityDir']
-    ScreenType = config['ScreenType']        
     delta = config['delta']
     res = config['dpi']
     svg = config['svg']
@@ -55,13 +51,9 @@ def DensityPlot(sample):
     print('Reading sgRNA read counts ...')    
     os.chdir(sgRNARanksDir)
     filename = glob.glob(sample+'_*sgRNAList.txt')[0]
-    HitList = pd.read_table(filename, sep='\t')       
-    sgIDs = list(HitList['sgRNA'].values)
-    genes = list(HitList['gene'].values)  
-    L = len(sgIDs)
+    HitList = pd.read_csv(filename, sep='\t')
     sample_counts = list(HitList['counts'].values)
     control_counts = list(HitList['control mean'].values)
-    sig = list(HitList['significant'].values)  
     # Log transformation
     print('Log'+str(logbase)+' transformation ...')
     if logbase == 2:
@@ -78,9 +70,9 @@ def DensityPlot(sample):
     if not os.path.exists(DensityDir):
         os.makedirs(DensityDir)    
     os.chdir(DensityDir)   
-    fig,ax = plt.subplots(figsize=(3.5,3.7)) 
+    fig, ax = plt.subplots(figsize=(3.5,3.7))
     seaborn.set_style("white")
-    seaborn.kdeplot(control_log,sample_log,cmap='Reds',shade=True,bw=.15,shade_lowest=False)
+    seaborn.kdeplot(x=control_log, y=sample_log, cmap='Reds', shade=True, bw_method=.15, thresh=0.05)
     xmax = 1.05*max(control_log)
     ymax = 1.25*max(sample_log)
     xmin = -0.1*max(control_log)
@@ -122,9 +114,6 @@ def DensityPlot(sample):
         print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')
 
 
-
-    
-    
 if __name__ == "__main__":
     input1 = sys.argv[1]
-    DensityPlot(input1) 
+    DensityPlot(input1)

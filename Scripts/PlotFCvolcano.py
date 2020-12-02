@@ -33,7 +33,7 @@ def VolcanoPlot(sample,GOI='none',Annot='none',NonT='none'):
     # Get parameters
     # ------------------------------------------------
     configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile)
+    config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     sgRNARanksDir = config['sgRNARanksDir']
     ScriptsDir = config['ScriptsDir']
@@ -64,7 +64,7 @@ def VolcanoPlot(sample,GOI='none',Annot='none',NonT='none'):
     print('Reading sgRNA read counts ...')    
     os.chdir(sgRNARanksDir)
     filename = glob.glob(sample+'_*sgRNAList.txt')[0]
-    sgRNARanking = pandas.read_table(filename, sep='\t')
+    sgRNARanking = pandas.read_csv(filename, sep='\t')
     L = len(sgRNARanking)    
     if ScreenType == 'enrichment':
         sgRNARanking = sgRNARanking.sort_values('fold change',ascending=True)
