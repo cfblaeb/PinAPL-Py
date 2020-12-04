@@ -8,19 +8,17 @@ Created on Thu May 30 17:26:55 2019
 # Volcano plot of fold change
 # =======================================================================
 # Imports 
-from __future__ import division # floating point division by default
 import sys
 import time
 import os
 import pandas
 import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy
 import yaml
 import glob
-from matplotlib.ticker import FuncFormatter
+
 
 def VolcanoPlot(sample,GOI='none',Annot='none',NonT='none'):
     # ------------------------------------------------
@@ -144,7 +142,7 @@ def VolcanoPlot(sample,GOI='none',Annot='none',NonT='none'):
     # save figure    
     if GOI != 'none':       
         if not os.path.exists(outputDir+'/'+sample+'_Highlighted_Genes'):
-        	os.makedirs(outputDir+'/'+sample+'_Highlighted_Genes')         
+            os.makedirs(outputDir+'/'+sample+'_Highlighted_Genes')
         os.chdir(outputDir+'/'+sample+'_Highlighted_Genes')  
     plt.savefig(figurename, dpi=res)  
     if svg:
@@ -183,8 +181,6 @@ def VolcanoPlot(sample,GOI='none',Annot='none',NonT='none'):
         time_elapsed = sec_elapsed/3600
         print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')
 
-
-    
     
 if __name__ == "__main__":
     if len(sys.argv) == 2:
@@ -204,4 +200,4 @@ if __name__ == "__main__":
         input2 = sys.argv[2]
         input3 = sys.argv[3]
         input4 = sys.argv[4]
-        VolcanoPlot(input1,input2,input3,input4)        
+        VolcanoPlot(input1,input2,input3,input4)

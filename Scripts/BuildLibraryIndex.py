@@ -12,8 +12,8 @@ import pandas as pd
 import yaml
 import os
 import time
-import sys
 from Bowtie2 import BuildIndex
+
 
 def BuildBowtieIndex():
 
@@ -84,6 +84,5 @@ def BuildBowtieIndex():
         print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')            
 
 
-   
 if __name__ == "__main__":
     BuildBowtieIndex()

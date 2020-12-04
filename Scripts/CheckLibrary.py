@@ -9,17 +9,15 @@ Created on Mon Oct 10 10:22:56 2016
 # =======================================================================
 # Imports
 import yaml
-import sys
 import os
 import pandas
+
 
 def LibrarySanityCheck():
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     LibDir = config['LibDir']
     LibFilename = config['LibFilename']
     LibFormat = LibFilename[-3:]
@@ -64,14 +62,10 @@ def LibrarySanityCheck():
         sgRNA = sgRNA.replace(' ','_')        
         ID0.append(sgRNA)    
     if GeneNames != GeneNames0 or ID != ID0:
-            LibFile0 = pandas.DataFrame(data = {'gene': [gene for gene in GeneNames0],
-                                     'ID': [sgRNA for sgRNA in ID0],
-                                     'seq': [s for s in seq]},
-                            columns = ['gene','ID','seq'])
-            LibFile0.to_csv(LibFilename, sep = libsep, index = False)
-            print("WARNING: Found non-printable characters in library file. Replaced by '_' ")
+        LibFile0 = pandas.DataFrame(data = {'gene': [gene for gene in GeneNames0], 'ID': [sgRNA for sgRNA in ID0], 'seq': [s for s in seq]}, columns = ['gene','ID','seq'])
+        LibFile0.to_csv(LibFilename, sep = libsep, index = False)
+        print("WARNING: Found non-printable characters in library file. Replaced by '_' ")
 
 
-   
 if __name__ == "__main__":
     LibrarySanityCheck()

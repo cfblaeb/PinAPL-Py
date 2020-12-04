@@ -8,21 +8,17 @@ Created on Sat Apr 30 14:22:06 2016
 # Find candidate sgRNAs
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
 import pandas
 import numpy
 import scipy
 from scipy import stats
-from decimal import *
 import os
 import glob
-import sys
 from statsmodels.sandbox.stats.multicomp import multipletests
 import time
 import yaml
-import warnings
 import sys
-from pvalPlots import *
+from pvalPlots import pvalHist
 
 
 def PrepareHitList(sample):
@@ -39,7 +35,6 @@ def PrepareHitList(sample):
     config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']    
-    WorkingDir = config['WorkingDir']
     AnalysisDir = config['AnalysisDir']
     InputDir = config['AlnQCDir']+sample
     CtrlDir = AnalysisDir + 'Control/'
@@ -141,7 +136,7 @@ def PrepareHitList(sample):
                       pval.append(scipy.stats.poisson.cdf(x[k],sigma2[k]))        
     # -----------------------------------------------------------                  
     else:                           # error in scree type
-    # -----------------------------------------------------------   
+        # -----------------------------------------------------------
         print('### ERROR: Check spelling of ScreenType in configuration file! ###')
 
     # -----------------------------------------------
@@ -156,9 +151,10 @@ def PrepareHitList(sample):
         # Plots
         print('Plotting p-values ...')
         pvalHist(pval,pval0,pvalDir,sample,res,svg)
-        VolcanoPlot(fc,pval,significant,pvalDir,ScreenType,sample,res,svg,alpha)
-        QQPlot(pval,significant,pvalDir,sample,res,svg,alpha)
-        zScorePlot(fc,significant,pvalDir,ScreenType,sample,res,svg,alpha)
+        # missing functions?
+        #VolcanoPlot(fc,pval,significant,pvalDir,ScreenType,sample,res,svg,alpha)
+        #QQPlot(pval,significant,pvalDir,sample,res,svg,alpha)
+        #zScorePlot(fc,significant,pvalDir,ScreenType,sample,res,svg,alpha)
 
                
     # -----------------------------------------------

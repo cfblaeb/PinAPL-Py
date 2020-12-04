@@ -6,7 +6,6 @@ Created on Wed Mar  8 18:34:42 2017
 @author: philipp
 """
 
-import sys
 import os
 import time
 import yaml
@@ -14,11 +13,8 @@ import yaml
 
 def RunSeqQC():
     start_total = time.time()
-    # Get parameters    
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
-    WorkingDir = config['WorkingDir']
+    # Get parameters
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     DataDir = config['DataDir']
     SeqQCDir = config['SeqQCDir']
     ScriptsDir = config['ScriptsDir']
@@ -36,8 +32,7 @@ def RunSeqQC():
     os.chdir(SeqQCDir)    
     os.system('rm *.zip')
     os.chdir(ScriptsDir)
-    end = time.time()    
-    
+
     end_total = time.time()
     # Final time stamp
     print('------------------------------------------------')

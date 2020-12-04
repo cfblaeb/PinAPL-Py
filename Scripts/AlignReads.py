@@ -9,12 +9,10 @@ Created on Mon May 16 19:11:28 2016
 # Perform Bowtie2 alignment
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
 import pandas
 from Bowtie2 import RunBowtie2
 import yaml
 import os
-import glob
 import time
 import sys
 

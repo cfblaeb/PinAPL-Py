@@ -11,8 +11,6 @@ Created on Thu May  9 16:29:08 2019
 # Imports 
 import os
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np

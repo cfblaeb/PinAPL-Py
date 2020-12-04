@@ -9,19 +9,17 @@ Created on Wed May 29 18:34:24 2019
 # z-Score plot of fold change
 # =======================================================================
 # Imports 
-from __future__ import division # floating point division by default
 import sys
 import time
 import os
 import pandas
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy
 import yaml
 import glob
 from matplotlib.ticker import FuncFormatter
+
 
 def kilos(x, pos):
     return '%1.0fk' % (x*1e-3)
@@ -147,7 +145,7 @@ def zScoreFC(sample,GOI='none',Annot='none',NonT='none'):
     # Save figure
     if GOI != 'none':    
         if not os.path.exists(outputDir+'/'+sample+'_Highlighted_Genes'):
-        	os.makedirs(outputDir+'/'+sample+'_Highlighted_Genes')         
+            os.makedirs(outputDir+'/'+sample+'_Highlighted_Genes')
         os.chdir(outputDir+'/'+sample+'_Highlighted_Genes')  
     plt.savefig(figurename, dpi=res)  
     if svg:
@@ -169,8 +167,6 @@ def zScoreFC(sample,GOI='none',Annot='none',NonT='none'):
                     str(zScores[k])+'\t'+str(sig[k])
                 print(println)
 
-
-
     # Final time stamp
     os.chdir(ScriptsDir)
     end_total = time.time()
@@ -188,7 +184,6 @@ def zScoreFC(sample,GOI='none',Annot='none',NonT='none'):
         print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')
 
 
-        
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         input1 = sys.argv[1]
@@ -207,4 +202,4 @@ if __name__ == "__main__":
         input2 = sys.argv[2]
         input3 = sys.argv[3]
         input4 = sys.argv[4]
-        zScoreFC(input1,input2,input3,input4)                
+        zScoreFC(input1,input2,input3,input4)

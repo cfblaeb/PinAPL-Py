@@ -14,8 +14,6 @@ import sys
 import yaml
 import pandas
 import numpy
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import time
 import os
@@ -37,9 +35,7 @@ def GeneScoreScatterplot(sample,GOI='none'):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     GeneMetric = config['GeneMetric']
     RankingsDir = config['GeneDir']
     PlotDir = config['GenePlotDir']    
@@ -93,10 +89,8 @@ def GeneScoreScatterplot(sample,GOI='none'):
     print('Plotting '+str(GeneMetric)+' scores ...')
     fig, ax = plt.subplots(figsize=(3.5,2.9))
     plt.scatter(RestIndex,V_rest,s=15,color='#99a399',lw=0,alpha=0.2)
-    plt.scatter(SigIndex,V_sig,s=15,color='#54e84c',lw=0,alpha=0.2,label='significant',\
-        rasterized=True)
-    plt.scatter(NonTIndex,V_nonT,s=15,color='#ffd575',lw=0,alpha=0.2,label='non-targeting',\
-        rasterized=True)
+    plt.scatter(SigIndex,V_sig,s=15,color='#54e84c',lw=0,alpha=0.2,label='significant', rasterized=True)
+    plt.scatter(NonTIndex,V_nonT,s=15,color='#ffd575',lw=0,alpha=0.2,label='non-targeting', rasterized=True)
     if GOI != 'none':
         GOILabel = GOI
         plt.scatter(GOIIndex,V_goi,s=15,color='red',lw=0,alpha=1,label=GOILabel,rasterized=True)    
@@ -116,13 +110,13 @@ def GeneScoreScatterplot(sample,GOI='none'):
     plt.tight_layout()
     # Save figure
     if not os.path.exists(PlotDir):
-    	os.makedirs(PlotDir)
+        os.makedirs(PlotDir)
     os.chdir(PlotDir)
     figurename = sample+'_GeneScores.png'
     if GOI != 'none':    
         figurename = figurename[:-4]+'_'+GOI+'.png'    
         if not os.path.exists(PlotDir+'/'+sample+'_Highlighted_Genes'):
-        	os.makedirs(PlotDir+'/'+sample+'_Highlighted_Genes')         
+            os.makedirs(PlotDir+'/'+sample+'_Highlighted_Genes')
         os.chdir(PlotDir+'/'+sample+'_Highlighted_Genes')  
     plt.savefig(figurename, dpi=res)  
     if svg:
@@ -143,8 +137,7 @@ def GeneScoreScatterplot(sample,GOI='none'):
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')   
-   
-    
+
     
 if __name__ == "__main__":
     if len(sys.argv) == 2:
@@ -153,4 +146,4 @@ if __name__ == "__main__":
     elif len(sys.argv) == 3:
         input1 = sys.argv[1]
         input2 = sys.argv[2]
-        GeneScoreScatterplot(input1,input2)     
+        GeneScoreScatterplot(input1,input2)

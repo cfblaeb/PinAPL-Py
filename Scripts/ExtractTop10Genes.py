@@ -38,6 +38,7 @@ def printTop10Genes(sample):
     print('\n')
     os.chdir(ScriptsDir)
 
+
 def GetTop10Genes(sample):
     configFile = open('configuration.yaml','r')
     config = yaml.load(configFile, Loader=yaml.FullLoader)

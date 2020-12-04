@@ -10,9 +10,7 @@ Created on Fri Oct 13 17:49:59 2017
 # =======================================================================
 # Imports
 import pandas
-import numpy
 import os
-import glob
 import time
 import yaml
 import sys

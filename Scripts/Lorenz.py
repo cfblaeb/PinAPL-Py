@@ -5,8 +5,8 @@ Created on Thu Apr 28 10:52:01 2016
 
 @author: philipp
 """
-from __future__ import division # floating point division by default
 import numpy
+
 
 def gini(data):
     N = len(data)  

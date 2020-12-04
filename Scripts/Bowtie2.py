@@ -12,10 +12,12 @@ Created on Wed Mar 23 17:53:39 2016
 import os
 import multiprocessing
 
+
 def BuildIndex(LibFastA,IndexDir,bw2Dir):
     os.chdir(IndexDir)
     bw2_cmdline = bw2Dir+'bowtie2-build -q -f library.fasta Library'
     os.system(bw2_cmdline)
+
 
 def RunBowtie2(ReadsFilename0,TempDataDir,AlnDir,bw2Dir,IndexDir,L_bw,N_bw,i_bw):   
     bw2output = ReadsFilename0 + '_bw2output.sam'

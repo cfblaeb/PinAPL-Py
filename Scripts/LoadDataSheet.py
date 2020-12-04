@@ -7,16 +7,14 @@ Created on Sat Feb 11 14:57:08 2017
 """
 # Load excel sheet with read filenames
 # =======================================================================
-import sys
 import os
 import yaml
 import pandas
 
+
 def LoadExcelDataSheet():
     # Get parameters
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     WorkingDir = config['WorkingDir']    
     ScriptsDir = config['ScriptsDir']
 

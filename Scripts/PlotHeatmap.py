@@ -8,14 +8,12 @@ Created on Sun Jul 24 17:43:58 2016
 # Clustering of top N enriched sgRNAs
 # ======================================================================================
 import os
-import glob
 import pandas as pd
 import yaml
-import sys
 import time
 import subprocess
-import re
 import numpy
+
 
 def TopN_Clustering():
     # ------------------------------------------------
@@ -30,8 +28,6 @@ def TopN_Clustering():
     configFile = open('configuration.yaml','r')
     config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
-    WorkingDir = config['WorkingDir']
-    AnalysisDir = config['AnalysisDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
     ClusterDir = config['HeatDir']
     ScriptsDir = config['ScriptsDir']

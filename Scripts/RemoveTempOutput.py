@@ -8,13 +8,13 @@ Created on Tue Dec  4 11:24:09 2018
 # Remove temporary trimming and alignment output
 # =======================================================================
 # Imports
-import sys
 import yaml
 import os
 import glob
 import time
 
-def CleanUp():  
+
+def CleanUp():
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------

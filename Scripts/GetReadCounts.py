@@ -9,7 +9,6 @@ Created on Tue Dec  4 09:57:05 2018
 # Perform Read counting, classification and normalization
 # =======================================================================
 # Imports
-from __future__ import division  # floating point division by default
 import sys
 import yaml
 import time
@@ -18,8 +17,6 @@ from os import path
 import pandas
 from collections import Counter
 from mpl_toolkits.mplot3d import axes3d
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy
 import pysam

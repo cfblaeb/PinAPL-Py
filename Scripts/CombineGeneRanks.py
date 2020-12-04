@@ -18,14 +18,13 @@ import numpy
 import scipy
 from scipy import stats
 
+
 def GeneRankCombination(treatment):
     print('++++++++++++++++++++++++++++++++++++++++++++++++')   
     
     # Get parameters    
     start = time.time()
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()    
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     alpha = config['alpha_g']
     padj = config['padj']
     metric = config['GeneMetric']
@@ -86,11 +85,9 @@ def GeneRankCombination(treatment):
         print('Time elapsed [hours]: ' + '%.3f' % time_elapsed)    
 
 
-        
 if __name__ == "__main__":
     input1 = sys.argv[1]
     GeneRankCombination(input1)
     
 # REFERENCES:
-# [REF 1]: 'Fisher's Method' (wikipedia)    
-    
+# [REF 1]: 'Fisher's Method' (wikipedia)

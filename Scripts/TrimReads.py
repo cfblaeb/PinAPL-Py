@@ -6,12 +6,11 @@ Created on Thu Jul  6 14:43:38 2017
 @author: philipp
 """
 
-import sys
 import os
 import yaml
-import time
 import subprocess
 import time
+
 
 def RunCutadapt():
     start_total = time.time()  
@@ -43,10 +42,9 @@ def RunCutadapt():
     for ReadsFilename in FileNames:
         ReadsFilename0 = 'Trim_'+ReadsFilename
         LogFilename = 'cutadapt_'+ReadsFilename+'.txt'
-        command = CutAdaptDir+'cutadapt -g '+seq_5_end\
-                                +' '+DataDir+ReadsFilename+' -o '+ReadsFilename0\
-                                +' -e '+str(CutErrorTol)+' -O 20 --trimmed-only -j 0 --rc -m '+str(R_min)+' -l '+str(sgLength)\
-                                +' 2>&1 > '+LogFilename
+        command = CutAdaptDir+'cutadapt -g '+seq_5_end + ' ' + DataDir + ReadsFilename + ' -o ' + ReadsFilename0\
+                  + ' -e ' + str(CutErrorTol) + ' -O 20 --trimmed-only -j 0 --rc -m '+str(R_min)+' -l '+str(sgLength)\
+                  + ' 2>&1 > ' + LogFilename
         subprocess.call(ScriptsDir+RunInBack+' "'+command+'" '+ReadsFilename+' cutadapt_status.log &',shell=True,\
             stdin=None, stdout=None, stderr=None, close_fds=True)
         filesNotDone.append(ReadsFilename+'_cutadapt_status.log')
@@ -82,8 +80,5 @@ def RunCutadapt():
         print('Time elapsed (Read trimming) [hours]: ' + '%.3f' % time_elapsed +'\n')
 
 
-
-
-
 if __name__ == "__main__":
-    RunCutadapt() 
+    RunCutadapt()

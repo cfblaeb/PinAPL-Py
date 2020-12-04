@@ -9,27 +9,25 @@ Created on Thu Apr 28 13:13:27 2016
 # Analyze count distribution
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
 import pandas as pd
 from Lorenz import gini
 import yaml
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import numpy
 import os
 import sys
 import time
-import warnings
-warnings.simplefilter(action = "ignore", category = FutureWarning)
 from matplotlib.ticker import FuncFormatter
+
 
 def kilos(x, pos):
     return '%1.0fk' % (x*1e-3)
 
+
 def kilos1(x, pos):
     return '%1.1fk' % (x*1e-3)
+
 
 def AnalyzeCounts(sample):
     # ------------------------------------------------
@@ -43,8 +41,6 @@ def AnalyzeCounts(sample):
     # ------------------------------------------------
     config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     ScriptsDir = config['ScriptsDir']    
-    #DataDir = config['DataDir']
-    #AnalysisDir = config['AnalysisDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
     GeneReadCountDir = config['GeneReadCountDir']
     OutputDir = config['CountQCDir']+sample
@@ -60,14 +56,11 @@ def AnalyzeCounts(sample):
     GuideFileName = sample+'_GuideCounts_normalized.txt'
     GuideFile = pd.read_csv(GuideFileName, sep='\t', names=colnames)
     ReadsPerGuide = list(GuideFile['counts'])
-    L = len(ReadsPerGuide)   
     os.chdir(GeneReadCountDir)
     colnames = ['gene','counts']    
     GeneFileName = sample+'_GeneCounts_normalized.txt'
     GeneFile = pd.read_csv(GeneFileName, sep='\t', names=colnames)
     ReadsPerGene = list(GeneFile['counts'])
-    sgID = list(GuideFile['ID'].values)    
-    gene = list(GuideFile['gene'].values)    
     if not os.path.exists(OutputDir):
         os.makedirs(OutputDir)
     os.chdir(OutputDir)

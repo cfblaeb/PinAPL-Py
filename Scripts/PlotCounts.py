@@ -8,11 +8,8 @@ Created on Fri Aug  5 09:41:39 2016
 # Scatterplot highlighting a particular gene of interest
 # =======================================================================
 # Imports 
-from __future__ import division # floating point division by default
 import os
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
@@ -37,11 +34,8 @@ def GOI_Scatterplot(sample,GOI='none',Annot='none',NonT='none',Transp='none'):
     config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
     ScriptsDir = config['ScriptsDir']
-    WorkingDir = config['WorkingDir'] 
-    AnalysisDir = config['AnalysisDir']
     sgRNARanksDir = config['sgRNARanksDir']
     PlotDir = config['ScatterDir']
-    alpha = config['alpha_s']
     delta = config['delta']
     NonTPrefix = config['NonTargetPrefix']
     res = config['dpi']
@@ -165,7 +159,7 @@ def GOI_Scatterplot(sample,GOI='none',Annot='none',NonT='none',Transp='none'):
     # Save figure
     if GOI != 'none':        
         if not os.path.exists(PlotDir+'/'+sample+'_Highlighted_Genes/'):
-        	os.makedirs(PlotDir+'/'+sample+'_Highlighted_Genes/')         
+            os.makedirs(PlotDir+'/'+sample+'_Highlighted_Genes/')
         os.chdir(PlotDir+'/'+sample+'_Highlighted_Genes/')        
         plt.savefig(figurename, dpi=res)
         if svg:

@@ -8,20 +8,15 @@ Created on Fri Apr 29 15:10:27 2016
 # Estimate mean counts and variance from control samples
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
 import numpy
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-import re
-import pandas
-import sys
 import time
 import yaml
 import scipy
 from scipy import stats
+
 
 def EstimateControlCounts(): 
     # ------------------------------------------------
@@ -38,8 +33,6 @@ def EstimateControlCounts():
     configFile.close()
     delta = config['delta']
     ScriptsDir = config['ScriptsDir']
-    WorkingDir = config['WorkingDir']
-    AlnQCDir = config['AlnQCDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
     ControlDir = config['ControlDir']
     res = config['dpi']

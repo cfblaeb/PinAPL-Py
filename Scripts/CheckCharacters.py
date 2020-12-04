@@ -40,8 +40,7 @@ def RunSanityCheck():
     # --------------------------------------------------------------------
     # Define bad characters (library)
     # --------------------------------------------------------------------     
-    BadCharacters = [' ','>','<',';',':',',','|','/','\\','(',')','[',']',\
-        '$','%','*','?','{','}','=','+','@']
+    BadCharacters = [' ','>','<',';',':',',','|','/','\\','(',')','[',']', '$','%','*','?','{','}','=','+','@']
         
     # --------------------------------------------------------------------
     # Check library
@@ -56,13 +55,10 @@ def RunSanityCheck():
             sgRNA = sgRNA.replace(bad_char,'_')       
         ID0.append(sgRNA)    
     if GeneNames != GeneNames0 or ID != ID0:
-            BadLibCharFound = True
-            LibFile0 = pandas.DataFrame(data = {'gene': [gene for gene in GeneNames0],
-                                     'ID': [sgRNA for sgRNA in ID0],
-                                     'seq': [s for s in seq]},
-                            columns = ['gene','ID','seq'])
-            LibFile0.to_csv(LibFilename, sep = libsep, index = False)
-            print("WARNING: Special characters in library file have been replaced by '_' ")
+        BadLibCharFound = True
+        LibFile0 = pandas.DataFrame(data = {'gene': [gene for gene in GeneNames0], 'ID': [sgRNA for sgRNA in ID0], 'seq': [s for s in seq]}, columns = ['gene','ID','seq'])
+        LibFile0.to_csv(LibFilename, sep = libsep, index = False)
+        print("WARNING: Special characters in library file have been replaced by '_' ")
 
     # --------------------------------------------------------------------
     # Load Data Sheet
@@ -76,8 +72,7 @@ def RunSanityCheck():
     # --------------------------------------------------------------------
     # Define bad characters (filenames & samples)
     # --------------------------------------------------------------------         
-    BadCharacters = [' ','>','<',';',':',',','|','/','\\','(',')','[',']',\
-        '$','%','*','?','{','}','=','+','@']
+    BadCharacters = [' ','>','<',';',':',',','|','/','\\','(',')','[',']', '$','%','*','?','{','}','=','+','@']
     
     # --------------------------------------------------------------------
     # Replace non-printable characters from filenames 

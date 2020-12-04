@@ -12,9 +12,6 @@ Created on Wed May 15 17:15:19 2019
 import yaml
 import pandas
 import numpy as np
-#import os
-import multiprocessing
-#from joblib import Parallel, delayed
 from statsmodels.distributions.empirical_distribution import ECDF
 
 
@@ -49,15 +46,14 @@ def compute_SigmaFC(sgRNAList):
     configFile = open('configuration.yaml','r')
     config = yaml.load(configFile, Loader=yaml.FullLoader)
     configFile.close()
-    #ScriptsDir = config['ScriptsDir']
-    #GeneDir = config['GeneDir']
+
     global delta; delta = config['delta']
     r = config['NumGuidesPerGene']
     Np = config['Np']
-    #padj = config['padj']
+
     alpha_g = config['alpha_g']
     ScreenType = config['ScreenType']
-    #num_cores = multiprocessing.cpu_count()
+
     global Lambda
     Lambda = -np.log(0.1)   # deprecation rate
     global FCmin  # deprecation cutoff (log10 fold change). Set to 0 for no deprecation
@@ -125,7 +121,6 @@ def compute_SigmaFC(sgRNAList):
     # ------------------------------------------------   
     print('Estimating null distribution ('+str(Np)+' permutations)...')
     P_set = np.random.choice(L,size=(Np,r),replace=True)
-    #SigmaFC_null = Parallel(n_jobs=num_cores)(delayed(SigmaFC_Permutation)(P) for P in P_set)
     SigmaFC_null = [SigmaFC_Permutation(P) for P in P_set]
     ecdf = ECDF(SigmaFC_null,side='left')
     if ScreenType == 'enrichment':

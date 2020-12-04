@@ -10,8 +10,6 @@ Created on Fri Apr 29 15:10:27 2016
 # Imports
 
 import numpy
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import os
 from matplotlib.ticker import FuncFormatter

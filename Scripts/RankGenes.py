@@ -41,7 +41,6 @@ def GeneRankingAnalysis(sample, config):
 	pvalDir = config['pvalDir_genes']
 	res = config['dpi']
 	svg = config['svg']
-	#r = config['NumGuidesPerGene']
 
 	# ------------------------------------------------
 	# Read sgRNA enrichment/depletion table
@@ -50,21 +49,6 @@ def GeneRankingAnalysis(sample, config):
 	print('Loading sgRNA ' + screentype + ' table ...')
 	filename = glob(sample + '_*sgRNAList.txt')[0]
 	sgRNARanking = pandas.read_csv(filename, sep='\t')
-	#if screentype == 'enrichment':
-	#	sgRNARanking = sgRNARanking.sort_values(['significant', 'p-value', 'fold change', 'sgRNA'], ascending=[0, 1, 0, 1])
-	#elif screentype == 'depletion':
-	#	sgRNARanking = sgRNARanking.sort_values(['significant', 'p-value', 'fold change', 'sgRNA'], ascending=[0, 1, 1, 1])
-	#genes = list(sgRNARanking['gene'])
-	#geneList = list(set(genes))
-
-	#NB_pval = list(sgRNARanking['p-value'])
-	#G = len(geneList)
-	#NB_sig = list(sgRNARanking['significant'])
-
-	# ------------------------------------------------
-	# Find number of sgRNAs per gene (some genes have less than r sgRNAs)
-	# ------------------------------------------------
-	#nGuides = sgRNARanking.groupby('gene')['sgRNA'].count()
 
 	# ------------------------------------------
 	# Find number of significant sgRNAs per gene

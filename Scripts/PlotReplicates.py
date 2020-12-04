@@ -8,19 +8,17 @@ Created on Fri Aug  5 09:41:39 2016
 # Scatterplot with two replicates
 # =======================================================================
 # Imports 
-from __future__ import division # floating point division by default
 import os
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy
-import glob
 import yaml
 import sys
 import time
 import scipy.stats
+
 
 def Repl_Scatterplot(Repl1,Repl2,GOI='none',Annot='none',NonT='none',Transp='none'):
     # ------------------------------------------------
@@ -33,12 +31,8 @@ def Repl_Scatterplot(Repl1,Repl2,GOI='none',Annot='none',NonT='none',Transp='non
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     ScriptsDir = config['ScriptsDir']
-    WorkingDir = config['WorkingDir'] 
-    AnalysisDir = config['AnalysisDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
     PlotDir = config['CorrelDir']
     HiLiteDir2 = config['HiLiteDir2']
@@ -49,7 +43,7 @@ def Repl_Scatterplot(Repl1,Repl2,GOI='none',Annot='none',NonT='none',Transp='non
     dotsize = config['dotsize']
     logbase = config['logbase'] 
     ShowNonTargets = config['ShowNonTargets']
-    TransparencyLevel = config['TransparencyLevel']
+
     if Annot == 'none':
         annotate = config['scatter_annotate']      
     elif Annot == 'False':
@@ -175,7 +169,7 @@ def Repl_Scatterplot(Repl1,Repl2,GOI='none',Annot='none',NonT='none',Transp='non
     # Save figure        
     if GOI != 'none':
         if not os.path.exists(HiLiteDir2):
-        	os.makedirs(HiLiteDir2)         
+            os.makedirs(HiLiteDir2)
         os.chdir(HiLiteDir2)
         plt.savefig(figurename, dpi=res)
         if svg:

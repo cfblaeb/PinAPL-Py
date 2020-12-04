@@ -9,21 +9,19 @@ Created on Sat Feb 11 12:23:50 2017
 # Number of reads barplot
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
-import matplotlib
-matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 import os
 import yaml
-import sys
 import re
 import pandas
 import numpy
 from matplotlib.ticker import FuncFormatter
 from matplotlib.font_manager import FontProperties
 
+
 def millions(x, pos):
     return '%1.1fM' % (x*1e-6)
+
 
 def PlotReadDepth():    
     # Get parameters    
@@ -40,12 +38,10 @@ def PlotReadDepth():
     # Get data
     os.chdir(WorkingDir)
     DataSheet = pandas.read_excel('DataSheet.xlsx')
-    FileNames = list(DataSheet['FILENAME'].values)
     SampleNames = list(DataSheet['SAMPLE NAME'].values)
     
     # Get number of reads per category        
     os.chdir(AlnQCDir)    
-    S = len(SampleNames)
     N1 = list(); N2 = list()
     n1 = list(); n2 = list()    
     for sample in SampleNames:
@@ -96,6 +92,5 @@ def PlotReadDepth():
     os.chdir(ScriptsDir)
 
 
-    
 if __name__ == "__main__":
-    PlotReadDepth()     
+    PlotReadDepth()
