@@ -141,7 +141,7 @@ def GeneRankingAnalysis(sample, config):
 	else:
 		print('### ERROR: Cannot find gene ranking method! ###')
 	# Correcting cdf artifact in case of no significant sgRNAs
-	if False not in Results_df.significant:
+	if Results_df.significant.all():
 		Results_df.significant = Results_df.significant == False
 
 	# -------------------------------------------------

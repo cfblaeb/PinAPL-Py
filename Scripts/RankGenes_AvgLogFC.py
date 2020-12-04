@@ -58,4 +58,4 @@ def compute_avg_log_fc(sgrna_df, config):
 	sig_grnas_per_gene = sgrna_df.groupby('gene')['significant'].sum()
 	sig_grnas_per_gene.name = "# signif. sgRNAs"
 	avg_log_fc = avg_log_fc.merge(sig_grnas_per_gene, left_index=True, right_index=True)
-	return avg_log_fc
+	return avg_log_fc.reset_index()

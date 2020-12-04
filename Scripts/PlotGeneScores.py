@@ -22,8 +22,10 @@ import os
 import glob
 from matplotlib.ticker import FuncFormatter
 
+
 def kilos(x, pos):
     return '%1.0fk' % (x*1e-3)
+
 
 def GeneScoreScatterplot(sample,GOI='none'):
     # ------------------------------------------------
