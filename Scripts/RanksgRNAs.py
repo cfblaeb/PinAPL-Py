@@ -10,13 +10,14 @@ Created on Sat Apr 30 14:22:06 2016
 # Imports
 import pandas
 import scipy
+import numpy
 from scipy import stats
-#from decimal import *
 from statsmodels.sandbox.stats.multicomp import multipletests
 import time
 import yaml
 import sys
-from pvalPlots import *
+import os
+from pvalPlots import pvalHist
 
 
 def PrepareGuideRanking(sample):

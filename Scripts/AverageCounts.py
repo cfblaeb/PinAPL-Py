@@ -9,7 +9,6 @@ Created on Fri Oct 13 17:49:59 2017
 # Average counts across replicates
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
 import pandas
 import numpy
 import os
@@ -23,9 +22,7 @@ def AverageReadCounts(treatment):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     ScriptsDir = config['ScriptsDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
     GeneReadCountDir = config['GeneReadCountDir']    
@@ -114,7 +111,8 @@ def AverageReadCounts(treatment):
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed [hours]: ' + '%.3f' % time_elapsed +'\n')    
-    
+
+
 if __name__ == "__main__":
     input1 = sys.argv[1]    
-    AverageReadCounts(input1)     
+    AverageReadCounts(input1)

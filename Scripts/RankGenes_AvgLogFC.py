@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """
 Created on Wed May 15 17:15:19 2019
 
@@ -10,76 +8,54 @@ Created on Wed May 15 17:15:19 2019
 # Sort genes by average Log FC 
 # =======================================================================
 import numpy
+import pandas
 from statsmodels.distributions.empirical_distribution import ECDF
 
 
-#def AverageLogFC(g, geneList, GeneBundle, lfc, L, repl_avg):
-#	gene = geneList[g]
-#	lfc_list = list()
-#	i0 = GeneBundle.index(gene)
-#	i = i0
-#	terminate = False
-#	while GeneBundle[i] == gene and terminate == False:
-#		lfc_list.append(lfc[i])
-#		if i <= L - 2:
-#			i += 1
-#		else:
-#			terminate = True
-#	if repl_avg == 'mean':
-#		avglfc = numpy.mean(lfc_list)
-#	elif repl_avg == 'median':
-#		avglfc = numpy.median(lfc_list)
-#	return avglfc
-
-
-def AvgLogFC_null(I, lfc, repl_avg):
-	logFC_I = [lfc[i] for i in I]
+def avg_log_fc_null(ind, lfc, repl_avg):
+	log_fc_i = [lfc[i] for i in ind]
 	if repl_avg == 'mean':
-		avglfc_I = numpy.mean(logFC_I)
+		avg_lfc_i = numpy.mean(log_fc_i)
 	else:
-		avglfc_I = numpy.median(logFC_I)
-	return avglfc_I
+		avg_lfc_i = numpy.median(log_fc_i)
+	return avg_lfc_i
 
 
-def compute_AvgLogFC(HitList, nGuides, config):
+def compute_avg_log_fc(sgrna_df, config):
 	r = config['NumGuidesPerGene']
 	screentype = config['ScreenType']
-	Np = config['Np']
+	config_np = config['Np']
 	alpha_g = config['alpha_g']
 	repl_avg = config['repl_avg']
 	# -------------------------------------------------
 	# Compute average log fold change across sgRNAs
 	# -------------------------------------------------
 	print('Computing average fold change across sgRNAs ...')
-	#Aux_DF = pandas.DataFrame(data={'gene': [genes[i] for i in range(L)], 'lfc': [numpy.log2(fc[i]) for i in range(L)]}, columns=['gene', 'lfc'])
-	#Aux_DF = Aux_DF.sort_values(['gene'])
-	HitList['lfc'] = HitList['fold change'].apply(numpy.log2)
-	HitList.sort_values(by='gene', inplace=True)
+	sgrna_df['AvgLogFC'] = sgrna_df['fold change'].apply(numpy.log2)
 
-	lfc = list(HitList['lfc'])
 	if repl_avg == 'mean':
-		AvgLogFC = HitList.groupby('gene')['lfc'].mean()[set(HitList.gene)].values
+		avg_log_fc = sgrna_df.groupby('gene')['AvgLogFC'].mean()
 	else:
-		AvgLogFC = HitList.groupby('gene')['lfc'].median()[set(HitList.gene)].values
-	#AvgLogFC = [AverageLogFC(g, geneList, GeneBundle, lfc, L, repl_avg) for g in range(G)]
+		avg_log_fc = sgrna_df.groupby('gene')['AvgLogFC'].median()
+	no_sgrna = sgrna_df.groupby('gene')['sgRNA'].count()
+	no_sgrna.name = "# sgRNAs"
+	avg_log_fc = pandas.merge(avg_log_fc, no_sgrna, left_index=True, right_index=True)
 	# -------------------------------------------------
 	# Compute permutations
 	# -------------------------------------------------
-	I_perm = numpy.random.choice(len(HitList), size=(Np, r), replace=True)
-	metric_null = [AvgLogFC_null(I, lfc, repl_avg) for I in I_perm]
+	I_perm = numpy.random.choice(len(sgrna_df), size=(config_np, r), replace=True)
+	metric_null = [avg_log_fc_null(I, list(sgrna_df['AvgLogFC']), repl_avg) for I in I_perm]
 	ecdf = ECDF(metric_null)
-	metric_pval = list()
-	for g in range(len(set(HitList['gene']))):
-		if nGuides[g] == 1:
-			pval = 'N/A'  # exclude p-value for miRNAs etc
-			metric_pval.append(pval)
-		elif screentype == 'enrichment':
-			pval = 1 - ecdf(AvgLogFC[g])
-			metric_pval.append(pval)
-		elif screentype == 'depletion':
-			pval = ecdf(AvgLogFC[g])
-			metric_pval.append(pval)
-		else:
-			print('### ERROR: Check spelling of ScreenType in configuration file! ###')
-	metric_sig = [True if isinstance(metric_pval[g], float) and metric_pval[g] < alpha_g else False for g in range(len(set(HitList['gene'])))]
-	return AvgLogFC, metric_pval, metric_sig
+	if screentype == 'enrichment':
+		sigs = avg_log_fc[avg_log_fc['# sgRNAs'] > 1]['AvgLogFC'].apply(lambda x: 1-ecdf(x))
+	elif screentype == 'depletion':
+		sigs = avg_log_fc[avg_log_fc['# sgRNAs'] > 1]['AvgLogFC'].apply(lambda x: ecdf(x))
+	else:
+		raise ValueError(f"screentype not recognized: {screentype}")
+	sigs.name = "p_value"
+	avg_log_fc = avg_log_fc.merge(sigs, how='left', left_index=True, right_index=True)
+	avg_log_fc['significant'] = avg_log_fc['p_value'].apply(lambda x: x < alpha_g)
+	sig_grnas_per_gene = sgrna_df.groupby('gene')['significant'].sum()
+	sig_grnas_per_gene.name = "# signif. sgRNAs"
+	avg_log_fc = avg_log_fc.merge(sig_grnas_per_gene, left_index=True, right_index=True)
+	return avg_log_fc

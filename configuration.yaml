@@ -6,7 +6,7 @@
 # ***********************************************************************
 
 # PROJECT PARAMETERS
-ScreenType: 'enrichment'              # type of screen ['enrichment'/'depletion']
+ScreenType: 'depletion'              # type of screen ['enrichment'/'depletion']
 
 # LIBRARY PARAMETERS
 LibFilename: 'vf_grna.csv'        # filename of library spreadsheet
