@@ -99,7 +99,7 @@ os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.l
 StatMsg = 'Reading sample definition input ...'
 os.system('python -u PrintStatus.py SubHeader "'+StatMsg+'" 2>&1 | tee -a PinAPL-Py.log')
 os.system('python -u '+LoaderScript+'.py 2>&1 | tee -a PinAPL-Py.log')
-SampleNames, Treatments, TreatmentSamples, Replicates = GetSamples()
+SampleNames, Treatments, TreatmentSamples, Replicates = get_samples(config)
 DoneMsg = 'Sample definition completed.'    
 os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.log')
 

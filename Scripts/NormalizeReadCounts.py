@@ -8,8 +8,6 @@ Created on Mon Feb 13 09:23:51 2017
 # Analyze count distribution
 # =======================================================================
 # Imports
-from __future__ import division # floating point division by default
-import sys
 import yaml
 import os
 import glob
@@ -29,13 +27,10 @@ def Normalization():
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     ScriptsDir = config['ScriptsDir']
     sgRNAReadCountDir = config['sgRNAReadCountDir']
-    GeneReadCountDir = config['GeneReadCountDir']      
-    delta = config['delta']
+    GeneReadCountDir = config['GeneReadCountDir']
     norm = config['Normalization']
     RoundCount = config['RoundCount']
     NormSuffix = '_normalized.txt'
@@ -66,7 +61,7 @@ def Normalization():
             sgIDs = list(GuideCounts['sgRNA'])        
             geneIDs = list(GuideCounts['gene'])                            
             ReadsPerGuide = list(GuideCounts['counts'])
-            N = sum(ReadsPerGuide)
+            N = GuideCounts['counts'].sum()
             if RoundCount:
                 ReadsPerGuide_0 = [int(numpy.round(ReadsPerGuide[k]/N * N0)) for k in range(L)]
             else:
@@ -85,11 +80,11 @@ def Normalization():
             G = len(GeneCounts)            
             geneIDs = list(GeneCounts['gene'])
             ReadsPerGene = list(GeneCounts['counts'])
-            N = sum(ReadsPerGene)
+            N = sum(ReadsPerGene)/N0
             if RoundCount:
-                ReadsPerGene_0 = [int(numpy.round(ReadsPerGene[j]/N * N0)) for j in range(G)]
+                ReadsPerGene_0 = [int(numpy.round(ReadsPerGene[j]/N)) for j in range(G)]
             else:
-                ReadsPerGene_0 = [ReadsPerGene[j]/N * N0 for j in range(G)]
+                ReadsPerGene_0 = [ReadsPerGene[j]/N for j in range(G)]
             GeneCounts0_Filename = filename[0:-4] + NormSuffix
             GeneCounts0 = pandas.DataFrame()
             GeneCounts0['geneID'] = geneIDs
@@ -157,12 +152,8 @@ def Normalization():
         sgIDs = list(SampleFile['sgRNA'])
         geneIDs = list(SampleFile['gene'])
         L = len(sgIDs)        
-        RawCounts = pandas.DataFrame(data = {'sgRNA': [sgIDs[k] for k in range(L)],
-                                         'gene': [geneIDs[k] for k in range(L)]},
-                                columns = ['sgRNA','gene'])
-        SizeFactors = pandas.DataFrame(data = {'sgRNA': [sgIDs[k] for k in range(L)],
-                                         'gene': [geneIDs[k] for k in range(L)]},
-                                columns = ['sgRNA','gene'])
+        RawCounts = pandas.DataFrame(data = {'sgRNA': [sgIDs[k] for k in range(L)], 'gene': [geneIDs[k] for k in range(L)]}, columns = ['sgRNA','gene'])
+        SizeFactors = pandas.DataFrame(data = {'sgRNA': [sgIDs[k] for k in range(L)], 'gene': [geneIDs[k] for k in range(L)]}, columns = ['sgRNA','gene'])
         # Compute geometric means for all sgRNAs
         print('Computing geometric means ...')
         for filename in FileNames_u:
@@ -246,7 +237,6 @@ def Normalization():
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')
-            
 
 
 if __name__ == "__main__":

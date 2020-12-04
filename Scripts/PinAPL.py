@@ -15,10 +15,11 @@ import yaml
 import itertools
 import time
 import glob
-import pandas
-from PrintStatus import *
-from ReadDataSheet import *
-from ExtractTop10Genes import *
+import pandas as pd
+from ExtractTop10Genes import GetTop10Genes
+from PrintStatus import PrintStatus_ProcessSample, PrintStatus_Header, PrintStatus_Done, PrintStatus_AllDone, PrintStatus_SkipSeqQC, PrintStatus_SkipTrim, PrintStatus_SubHeader, PrintStatus_SkipAlnQC, PrintStatus_SkipAlignment, PrintStatus_CombineReplicates, PrintStatus_TimeStamp
+from CheckCharacters import RunSanityCheck
+from RankGenes import GeneRankingAnalysis
 
 # Open configuration file
 config = yaml.load(open('configuration.yaml'), Loader=yaml.FullLoader)
@@ -57,7 +58,7 @@ sgRNARankScript = config['sgRNARankScript']
 zFCScript = config['zFCScript']
 vFCScript = config['vFCScript']
 AverageCountsScript = config['AverageCountsScript']
-GeneRankScript = config['GeneRankScript']
+#GeneRankScript = config['GeneRankScript']
 GenePlotScript = config['GenePlotScript']
 CombineScript = config['CombineScript']
 ScatterScript = config['ScatterScript']
@@ -75,15 +76,18 @@ os.system('cp configuration.yaml '+ScriptsDir)
 os.chdir(ScriptsDir)
 
 # Print Header
-os.system('python -u PrintStatus.py Header blank 2>&1 | tee PinAPL-Py.log')
+PrintStatus_Header()
+#os.system('python -u PrintStatus.py Header blank 2>&1 | tee PinAPL-Py.log')
 start = time.time()
 
 # Character sanity check
-StatMsg = 'Running character sanity check ...'
-os.system('python -u PrintStatus.py SubHeader "'+StatMsg+'" 2>&1 | tee -a PinAPL-Py.log')
-os.system('python -u '+SanityScript+'.py 2>&1 | tee -a PinAPL-Py.log')
-DoneMsg = 'Character sanity check completed.'
-os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.log')
+#os.system('python -u PrintStatus.py SubHeader "'+StatMsg+'" 2>&1 | tee -a PinAPL-Py.log')
+#os.system('python -u '+SanityScript+'.py 2>&1 | tee -a PinAPL-Py.log')
+#os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.log')
+PrintStatus_SubHeader('Running character sanity check ...')
+RunSanityCheck
+PrintStatus_Done('Character sanity check completed.')
+
 
 # Generate index if not present
 if not os.path.exists(IndexDir):
@@ -97,8 +101,14 @@ if not os.path.exists(IndexDir):
 StatMsg = 'Reading sample definition input ...'
 os.system('python -u PrintStatus.py SubHeader "'+StatMsg+'" 2>&1 | tee -a PinAPL-Py.log')
 os.system('python -u '+LoaderScript+'.py 2>&1 | tee -a PinAPL-Py.log')
-SampleNames, Treatments, TreatmentSamples, Replicates = GetSamples()
+
+datasheet = pd.read_excel(config['WorkingDir'] + '/DataSheet.xlsx')
+SampleNames = datasheet['SAMPLE NAME'].to_list()
+Treatments = datasheet['TREATMENT'].unique().tolist()
+TreatmentSamples = datasheet[~datasheet['SAMPLE NAME'].str.contains("Control")]['SAMPLE NAME'].to_list()
+Replicates = {i: x['SAMPLE NAME'].to_list() for i, x in datasheet.groupby('TREATMENT')}
 DoneMsg = 'Sample definition completed.'
+
 os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.log')
 
 # Run Sequence Quality Control
@@ -245,14 +255,18 @@ os.system('python -u '+ClusterScript+'.py'+' 2>&1 | tee -a PinAPL-Py.log' )
 DoneMsg = 'Clustering analysis completed.'
 os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.log')
 
-# Rank genes 
-StatMsg = 'Gene ranking ...'
-os.system('python -u PrintStatus.py SubHeader "'+StatMsg+'" 2>&1 | tee -a PinAPL-Py.log')
+# Rank genes
+PrintStatus_SubHeader('Gene ranking ...')
+#StatMsg = 'Gene ranking ...'
+#os.system('python -u PrintStatus.py SubHeader "'+StatMsg+'" 2>&1 | tee -a PinAPL-Py.log')
 for sample in TreatmentSamples:
-	os.system('python -u PrintStatus.py ProcessSample '+sample+' 2>&1 | tee -a PinAPL-Py.log')
-	os.system('python -u '+GeneRankScript+'.py '+sample+' 2>&1 | tee -a PinAPL-Py.log')
-DoneMsg = 'Gene ranking completed.'
-os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.log')
+	PrintStatus_ProcessSample(sample)
+	#os.system('python -u PrintStatus.py ProcessSample '+sample+' 2>&1 | tee -a PinAPL-Py.log')
+	GeneRankingAnalysis(sample, config)
+	#os.system('python -u '+GeneRankScript+'.py '+sample+' 2>&1 | tee -a PinAPL-Py.log')
+PrintStatus_Done('Gene ranking completed.')
+#DoneMsg = 'Gene ranking completed.'
+#os.system('python -u PrintStatus.py Done "'+DoneMsg+'" 2>&1 | tee -a PinAPL-Py.log')
 
 # Prepare gene score scatterplots
 StatMsg = 'Plotting gene ranks ...'

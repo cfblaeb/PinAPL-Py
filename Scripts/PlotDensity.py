@@ -34,9 +34,7 @@ def DensityPlot(sample):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     ScriptsDir = config['ScriptsDir']
     sgRNARanksDir = config['sgRNARanksDir']
     DensityDir = config['DensityDir']
@@ -68,7 +66,7 @@ def DensityPlot(sample):
     # --------------
     print('Generating density plot ...')
     if not os.path.exists(DensityDir):
-        os.makedirs(DensityDir)    
+        os.makedirs(DensityDir)
     os.chdir(DensityDir)   
     fig, ax = plt.subplots(figsize=(3.5,3.7))
     seaborn.set_style("white")
@@ -77,7 +75,8 @@ def DensityPlot(sample):
     ymax = 1.25*max(sample_log)
     xmin = -0.1*max(control_log)
     ymin = -0.1*max(sample_log)    
-    plt.xlim([xmin,xmax]); plt.ylim([ymin,ymax])
+    plt.xlim([xmin,xmax])
+    plt.ylim([ymin,ymax])
     plt.tick_params(reset = True,labelsize=11)
     axes = plt.gca()
     x0 = axes.get_xlim()  

@@ -61,4 +61,4 @@ def GetTop10Genes(sample):
 
 if __name__ == "__main__":
     input1 = sys.argv[1]    
-    printTop10Genes(input1)    
+    printTop10Genes(input1)

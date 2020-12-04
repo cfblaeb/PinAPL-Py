@@ -75,7 +75,7 @@ if __name__ == "__main__":
     elif input1 == 'ProcessSample':
         PrintStatus_ProcessSample(input2)
     elif input1 == 'CombineReplicates':
-        PrintStatus_CombineReplicates()                   
+        PrintStatus_CombineReplicates()
     elif input1 == 'SkipTrim':
         PrintStatus_SkipTrim()           
     elif input1 == 'SkipAlignment':

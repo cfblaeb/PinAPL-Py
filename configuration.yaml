@@ -10,15 +10,15 @@ ScreenType: 'enrichment'              # type of screen ['enrichment'/'depletion'
 
 # LIBRARY PARAMETERS
 LibFilename: 'vf_grna.csv'        # filename of library spreadsheet
-seq_5_end: 'TCTTGTGGAAAGGACGAAACACCG'       # 5'-sequence adapter
+seq_5_end: 'TCTTGTGGAAAGGACGAAACACCN'       # 5'-sequence adapter
 NonTargetPrefix: 'NT_'             # prefix for non-targeting sgRNAs in library
 NumGuidesPerGene: 5                     # number of sgRNAs per gene 
                                        
 # ANALYSIS OPTIONS
-GeneMetric: 'aRRA'                   # metric for gene ranking ['SigmaFC'/'AvgLogFC'/'aRRA'/'STARS']
+GeneMetric: 'AvgLogFC'                   # metric for gene ranking ['SigmaFC'/'AvgLogFC'/'aRRA'/'STARS']
 padj: 'fdr_bh'                          # method for p-value adjustment ['fdr_bh'/'sidak'/'bonferroni']
 alpha_s: 0.01                            # significance threshold (sgRNAs enrichment/depletion)
-alpha_g: 0.01                            # significance threshold (gene ranking)
+alpha_g: 0.0015                            # significance threshold (gene ranking)
 Normalization: 'total'                    # normalization of read counts ['cpm'/'size'/'total']
 ClusterBy: 'variance'                   # clustering criterion ['variance'/'counts']
 RoundCount: False                       # round counts after normalization [True/False]
@@ -32,8 +32,8 @@ thr_STARS: 10                           # threshold percentage for STARS analysi
 TopN: 25                                # number of top sgRNAs to take into account for clustering
 ShowNonTargets: True                    # show non-targeting controls in scatterplots [True/False]
 scatter_annotate: False                 # annotate highlighted sgRNAs in scatterplots [True/False]
-IncludeDensityPlots: True              # include sgRNA density plots [True/False]
-AutoHighlight: True                     # automatically highlight the top 10 ranked genes [True/False]
+IncludeDensityPlots: False              # include sgRNA density plots [True/False]
+AutoHighlight: False                     # automatically highlight the top 10 ranked genes [True/False]
 
 # TECHNICAL PARAMETERS (changes not required/recommended)
 Cutoff: 0                       # read count threshold

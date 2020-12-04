@@ -9,14 +9,12 @@ Created on Thu Nov 10 14:46:37 2016
 # Find candidate genes
 # =======================================================================
 # Imports
-import yaml
 import os
 import time
 import pandas
 from glob import glob
 from matplotlib import pyplot as plt
 from collections import Counter
-import sys
 from pvalPlots import pvalHist
 from RankGenes_SigmaFC import compute_SigmaFC
 from RankGenes_AvgLogFC import compute_AvgLogFC
@@ -24,7 +22,7 @@ from RankGenes_aRRA import compute_aRRA
 from RankGenes_STARS import compute_STARS
 
 
-def GeneRankingAnalysis(sample):
+def GeneRankingAnalysis(sample, config):
 	# ------------------------------------------------
 	# Print header
 	# ------------------------------------------------
@@ -34,7 +32,6 @@ def GeneRankingAnalysis(sample):
 	# ------------------------------------------------
 	# Get parameters
 	# ------------------------------------------------
-	config = yaml.load(open('configuration.yaml', 'r'), Loader=yaml.FullLoader)
 	ScriptsDir = config['ScriptsDir']
 	sgRNARanksDir = config['sgRNARanksDir']
 	EffDir = config['EffDir']
@@ -129,7 +126,7 @@ def GeneRankingAnalysis(sample):
 		metric, metric_pval, metric_sig = compute_STARS(sgRNARanking)
 		SortFlag = False  # metric always from high to low
 	elif GeneMetric == 'AvgLogFC':
-		metric, metric_pval, metric_sig = compute_AvgLogFC(sgRNARanking, nGuides)
+		metric, metric_pval, metric_sig = compute_AvgLogFC(sgRNARanking, nGuides, config)
 		SortFlag = False if screentype == 'enrichment' else True  # metric based on fold-change
 	else:
 		print('### ERROR: Cannot find gene ranking method! ###')
@@ -186,6 +183,6 @@ def GeneRankingAnalysis(sample):
 		print('Time elapsed [hours]: ' + '%.3f' % time_elapsed + '\n')
 
 
-if __name__ == "__main__":
-	input1 = sys.argv[1]
-	GeneRankingAnalysis(input1)
+#if __name__ == "__main__":
+#	input1 = sys.argv[1]
+#	GeneRankingAnalysis(input1)
