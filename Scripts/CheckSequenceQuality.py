@@ -8,13 +8,11 @@ Created on Wed Mar  8 18:34:42 2017
 
 import os
 import time
-import yaml
 
 
-def RunSeqQC():
+def RunSeqQC(config):
     start_total = time.time()
     # Get parameters
-    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     DataDir = config['DataDir']
     SeqQCDir = config['SeqQCDir']
     ScriptsDir = config['ScriptsDir']
@@ -47,7 +45,3 @@ def RunSeqQC():
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed (Quality control) [hours]: ' + '%.3f' % time_elapsed +'\n')
-
-
-if __name__ == "__main__":
-    RunSeqQC() 

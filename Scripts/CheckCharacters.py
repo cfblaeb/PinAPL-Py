@@ -8,16 +8,14 @@ Created on Mon Oct 10 10:22:56 2016
 # Library sanity check
 # =======================================================================
 # Imports
-import yaml
 import os
 import pandas
 
 
-def RunSanityCheck():
+def RunSanityCheck(config):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     LibDir = config['LibDir']
     LibFilename = config['LibFilename']
     LibFormat = LibFilename[-3:]
@@ -27,10 +25,9 @@ def RunSanityCheck():
       
     # --------------------------------------------------------------------
     # Replace non-printable characters from library (...these cause problems in PlotCount.py)
-    # --------------------------------------------------------------------   
-    os.chdir(LibDir)
+    # --------------------------------------------------------------------
     LibCols = ['gene', 'ID', 'seq']
-    LibFile = pandas.read_csv(LibFilename, sep=libsep, skiprows=1, names=LibCols)
+    LibFile = pandas.read_csv(f"{LibDir}/{LibFilename}", sep=libsep, skiprows=1, names=LibCols)
     GeneNames = list(LibFile['gene'])
     ID = list(LibFile['ID'])
     seq = list(LibFile['seq']) 
@@ -57,17 +54,15 @@ def RunSanityCheck():
     if GeneNames != GeneNames0 or ID != ID0:
         BadLibCharFound = True
         LibFile0 = pandas.DataFrame(data = {'gene': [gene for gene in GeneNames0], 'ID': [sgRNA for sgRNA in ID0], 'seq': [s for s in seq]}, columns = ['gene','ID','seq'])
-        LibFile0.to_csv(LibFilename, sep = libsep, index = False)
+        LibFile0.to_csv(f"{LibDir}/LibFilename", sep = libsep, index = False)
         print("WARNING: Special characters in library file have been replaced by '_' ")
 
     # --------------------------------------------------------------------
     # Load Data Sheet
-    # -------------------------------------------------------------------- 
-    os.chdir(WorkingDir)
-    DataSheet = pandas.read_excel('DataSheet.xlsx')
+    # --------------------------------------------------------------------
+    DataSheet = pandas.read_excel(f'{WorkingDir}/DataSheet.xlsx')
     Filenames = list(DataSheet['FILENAME'])
     TreatmentList = list(DataSheet['TREATMENT'])
-    F = len(Filenames)
 
     # --------------------------------------------------------------------
     # Define bad characters (filenames & samples)
@@ -76,17 +71,16 @@ def RunSanityCheck():
     
     # --------------------------------------------------------------------
     # Replace non-printable characters from filenames 
-    # --------------------------------------------------------------------      
-    os.chdir(DataDir)    
+    # --------------------------------------------------------------------
     BadFileCharFound = False        
-    for j in range(F):
+    for j in range(len(Filenames)):
         Filename = Filenames[j]
         Filename0 = Filename
         for bad_char in BadCharacters:
             Filename0 = Filename0.replace(bad_char,'_')
         if Filename0 != Filename:
             BadFileCharFound = True
-            os.system('mv '+"'"+Filename+"'"+' '+Filename0)
+            os.system(f"mv {DataDir}/{Filename} {DataDir}/{Filename0}")
             DataSheet['FILENAME'][j] = Filename0  
             print("WARNING: Special characters in filenames names replaced by '_'")
 
@@ -106,15 +100,10 @@ def RunSanityCheck():
     # Update Data Sheet
     # --------------------------------------------------------------------            
     if BadFileCharFound or BadSampleCharFound:
-        os.chdir(WorkingDir)
-        DataSheet.to_excel('DataSheet.xlsx',columns=['FILENAME','TREATMENT'])        
+        DataSheet.to_excel(f'{WorkingDir}/DataSheet.xlsx',columns=['FILENAME','TREATMENT'])
 
     # --------------------------------------------------------------------
     # No special characters found
     # -------------------------------------------------------------------- 
     if not BadLibCharFound and not BadFileCharFound and not BadSampleCharFound:
         print('No special characters found.')
-
-
-if __name__ == "__main__":
-    RunSanityCheck()

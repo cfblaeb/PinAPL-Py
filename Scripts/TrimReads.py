@@ -7,17 +7,13 @@ Created on Thu Jul  6 14:43:38 2017
 """
 
 import os
-import yaml
 import subprocess
 import time
 
 
-def RunCutadapt():
+def RunCutadapt(config):
     start_total = time.time()  
-    # Get parameters    
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()    
+    # Get parameters
     DataDir = config['DataDir']
     TempDataDir = config['TempDataDir']
     CutAdaptDir = config['CutAdaptDir']
@@ -78,7 +74,3 @@ def RunCutadapt():
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed (Read trimming) [hours]: ' + '%.3f' % time_elapsed +'\n')
-
-
-if __name__ == "__main__":
-    RunCutadapt()

@@ -11,7 +11,6 @@ Created on Sat Feb 11 12:23:50 2017
 # Imports
 import matplotlib.pyplot as plt
 import os
-import yaml
 import re
 import pandas
 import numpy
@@ -23,11 +22,8 @@ def millions(x, pos):
     return '%1.1fM' % (x*1e-6)
 
 
-def PlotReadDepth():    
-    # Get parameters    
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
+def PlotReadDepth(config):
+    # Get parameters
     AlnQCDir = config['AlnQCDir']
     WorkingDir = config['WorkingDir']
     DepthDir = config['DepthDir']
@@ -90,7 +86,3 @@ def PlotReadDepth():
     if svg:
         plt.savefig('Read_Depth.svg',bbox_inches="tight")
     os.chdir(ScriptsDir)
-
-
-if __name__ == "__main__":
-    PlotReadDepth()

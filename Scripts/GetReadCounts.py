@@ -9,8 +9,6 @@ Created on Tue Dec  4 09:57:05 2018
 # Perform Read counting, classification and normalization
 # =======================================================================
 # Imports
-import sys
-import yaml
 import time
 import os
 from os import path
@@ -31,7 +29,7 @@ def millions2(x, pos):
     return '%1.2fM' % (x*1e-6)    
 
 
-def CountReads(sample):  
+def CountReads(sample, config):
     # ------------------------------------------------
     # Print header
     # ------------------------------------------------
@@ -41,7 +39,6 @@ def CountReads(sample):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     WorkingDir = config['WorkingDir']
     LibDir = config['LibDir']    
     LibFilename = config['LibFilename']
@@ -293,8 +290,3 @@ def CountReads(sample):
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed [hours]: ' + '%.3f' % time_elapsed +'\n') 
-        
-
-if __name__ == "__main__":
-    input1 = sys.argv[1]
-    CountReads(input1)

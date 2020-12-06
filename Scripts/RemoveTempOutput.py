@@ -8,19 +8,15 @@ Created on Tue Dec  4 11:24:09 2018
 # Remove temporary trimming and alignment output
 # =======================================================================
 # Imports
-import yaml
 import os
 import glob
 import time
 
 
-def CleanUp():
+def CleanUp(config):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
     AlnOutput = config['AlnOutput']
     keepCutReads = config['keepCutReads']    
     TempDataDir = config['TempDataDir']
@@ -71,7 +67,3 @@ def CleanUp():
     else:
         time_elapsed = sec_elapsed/3600
         print('Time elapsed [hours]: ' + '%.3f' % time_elapsed)    
-        
-
-if __name__ == "__main__":
-    CleanUp()

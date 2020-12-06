@@ -6,13 +6,13 @@
 # ***********************************************************************
 
 # PROJECT PARAMETERS
-ScreenType: 'depletion'              # type of screen ['enrichment'/'depletion']
+ScreenType: 'enrichment'              # type of screen ['enrichment'/'depletion']
 
 # LIBRARY PARAMETERS
-LibFilename: 'vf_grna.csv'        # filename of library spreadsheet
+LibFilename: 'lv_grna.csv'        # filename of library spreadsheet
 seq_5_end: 'TCTTGTGGAAAGGACGAAACACCN'       # 5'-sequence adapter
 NonTargetPrefix: 'NT_'             # prefix for non-targeting sgRNAs in library
-NumGuidesPerGene: 5                     # number of sgRNAs per gene 
+NumGuidesPerGene: 7                     # number of sgRNAs per gene
                                        
 # ANALYSIS OPTIONS
 GeneMetric: 'AvgLogFC'                   # metric for gene ranking ['SigmaFC'/'AvgLogFC'/'aRRA'/'STARS']

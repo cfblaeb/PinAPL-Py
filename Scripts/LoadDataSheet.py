@@ -8,13 +8,11 @@ Created on Sat Feb 11 14:57:08 2017
 # Load excel sheet with read filenames
 # =======================================================================
 import os
-import yaml
 import pandas
 
 
-def LoadExcelDataSheet():
+def LoadExcelDataSheet(config):
     # Get parameters
-    config = yaml.load(open('configuration.yaml','r'), Loader=yaml.FullLoader)
     WorkingDir = config['WorkingDir']    
     ScriptsDir = config['ScriptsDir']
 
@@ -40,7 +38,3 @@ def LoadExcelDataSheet():
         os.chdir(ScriptsDir)
     else:
         print('### ERROR: No control treatment defined! ###')
-    
-    
-if __name__ == "__main__":
-    LoadExcelDataSheet()

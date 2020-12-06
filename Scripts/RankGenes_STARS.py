@@ -9,21 +9,13 @@ Created on Wed May 15 17:15:19 2019
 # =======================================================================
 # Sort genes by STARS (Doench et al., Nat Biotech 2016)
 # =======================================================================
-from joblib import Parallel, delayed
-import multiprocessing
-from scipy.stats import beta
-from statsmodels.distributions.empirical_distribution import ECDF
 import yaml
 import pandas
-import numpy
 import os
 import glob
 
 
-def compute_STARS(HitList): 
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()      
+def compute_STARS(HitList, config):
     STARSDir = config['STARSDir']
     thr = config['thr_STARS']
     screentype = config['ScreenType'] 

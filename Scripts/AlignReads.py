@@ -11,13 +11,11 @@ Created on Mon May 16 19:11:28 2016
 # Imports
 import pandas
 from Bowtie2 import RunBowtie2
-import yaml
 import os
 import time
-import sys
 
 
-def ReadAlignment(sample):    
+def ReadAlignment(sample, config):
     # ------------------------------------------------
     # Print header
     # ------------------------------------------------
@@ -27,9 +25,6 @@ def ReadAlignment(sample):
     # ------------------------------------------------
     # Get parameters
     # ------------------------------------------------
-    configFile = open('configuration.yaml','r')
-    config = yaml.load(configFile, Loader=yaml.FullLoader)
-    configFile.close()
     ScriptsDir = config['ScriptsDir']
     WorkingDir = config['WorkingDir']
     TempDataDir = config['TempDataDir']
@@ -112,8 +107,4 @@ def ReadAlignment(sample):
         print('Time elapsed (Total) [mins]: ' + '%.3f' % time_elapsed +'\n')
     else:
         time_elapsed = sec_elapsed/3600
-        print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')            
-      
-if __name__ == "__main__":
-    input1 = sys.argv[1]
-    ReadAlignment(input1)
+        print('Time elapsed (Total) [hours]: ' + '%.3f' % time_elapsed +'\n')
