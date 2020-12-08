@@ -95,7 +95,7 @@ def CountReads(sample, config):
     elif bam_file_present: 
         os.system('samtools view -h '+bam_file+' > '+sam_file)
     else:
-        print('### ERROR: No alignment file present ###')
+        raise ValueError('### ERROR: No alignment file present ###')
     bw2sam = pysam.AlignmentFile(sam_file, 'rb')
     print('Applying matching threshold ...')
     print('Applying ambiguity threshold ...')       
@@ -191,67 +191,67 @@ def CountReads(sample, config):
     # MAPPING QUALITY HISTOGRAM
     # ------------------------------------------
     os.chdir(OutputDir)
-    print('Plotting mapping quality ...')
-    maxQuality = max(mapQ)
-    fig, ax = plt.subplots(figsize=(3.5,2.9))
-    plt.hist(mapQ, bins = range(maxQuality+1), width = 1, align = 'left')
-    plt.xlim([-1,maxQuality+1])
-    plt.title('Read Alignment Quality', fontsize=12)
-    plt.xlabel('Bowtie2 Mapping Quality', fontsize=10)
-    plt.ylabel('Number of Reads', fontsize=10)
-    plt.tick_params(labelsize=10)
-    formatter = FuncFormatter(millions2)
-    ax.yaxis.set_major_formatter(formatter) 
-    plt.tight_layout()
-    plt.savefig(sample+'_MappingQuality.png',dpi=res)  
-    if svg:
-        plt.savefig(sample+'_MappingQuality.svg')  
+    #print('Plotting mapping quality ...')
+    #maxQuality = max(mapQ)
+    #fig, ax = plt.subplots(figsize=(3.5,2.9))
+    #plt.hist(mapQ, bins = range(maxQuality+1), width = 1, align = 'left')
+    #plt.xlim([-1,maxQuality+1])
+    #plt.title('Read Alignment Quality', fontsize=12)
+    #plt.xlabel('Bowtie2 Mapping Quality', fontsize=10)
+    #plt.ylabel('Number of Reads', fontsize=10)
+    #plt.tick_params(labelsize=10)
+    #formatter = FuncFormatter(millions2)
+    #ax.yaxis.set_major_formatter(formatter)
+    #plt.tight_layout()
+    #plt.savefig(sample+'_MappingQuality.png',dpi=res)
+    #if svg:
+    #    plt.savefig(sample+'_MappingQuality.svg')
         
     # ------------------------------------------        
     # ALIGNMENT SCORE BARPLOT
     # ------------------------------------------        
     print('Plotting alignment scores ...')
-    primScoreKeep = [primScore[k] for k in range(NReads) if AlnStatus[k] in ['Unique','Tolerate']]
-    secScoreKeep = [secScore[k] for k in range(NReads) if AlnStatus[k] in ['Unique','Tolerate']]    
-    primScoreToss = [primScore[k] for k in range(NReads) if AlnStatus[k] in ['Fail','Ambiguous']]
-    secScoreToss = [secScore[k] for k in range(NReads) if AlnStatus[k] in ['Fail','Ambiguous']]
+    #primScoreKeep = [primScore[k] for k in range(NReads) if AlnStatus[k] in ['Unique','Tolerate']]
+    #secScoreKeep = [secScore[k] for k in range(NReads) if AlnStatus[k] in ['Unique','Tolerate']]
+    #primScoreToss = [primScore[k] for k in range(NReads) if AlnStatus[k] in ['Fail','Ambiguous']]
+    #secScoreToss = [secScore[k] for k in range(NReads) if AlnStatus[k] in ['Fail','Ambiguous']]
     # Plot bars (matched reads)
-    xedges = range(42)
-    yedges = range(42)
-    H, xedges, yedges = numpy.histogram2d(secScoreKeep, primScoreKeep, bins=(xedges, yedges))
-    Y, X = numpy.nonzero(H)
-    Z = H[Y,X]
-    Z_off = numpy.zeros(len(Y))
-    dX = numpy.ones(len(X))
-    dY = numpy.ones(len(Y))
+    #xedges = range(42)
+    #yedges = range(42)
+    #H, xedges, yedges = numpy.histogram2d(secScoreKeep, primScoreKeep, bins=(xedges, yedges))
+    #Y, X = numpy.nonzero(H)
+    #Z = H[Y,X]
+    #Z_off = numpy.zeros(len(Y))
+    #dX = numpy.ones(len(X))
+    #dY = numpy.ones(len(Y))
     # Plot bars (discarded reads)
-    h, xedges, yedges = numpy.histogram2d(secScoreToss, primScoreToss, bins=(xedges, yedges))
-    y, x = numpy.nonzero(h)
-    z = h[y,x]
-    z_off = numpy.zeros(len(y))
-    dx = numpy.ones(len(x))
-    dy = numpy.ones(len(y))
+    #h, xedges, yedges = numpy.histogram2d(secScoreToss, primScoreToss, bins=(xedges, yedges))
+    #y, x = numpy.nonzero(h)
+    #z = h[y,x]
+    #z_off = numpy.zeros(len(y))
+    #dx = numpy.ones(len(x))
+    #dy = numpy.ones(len(y))
     # Show plot    
-    fig = plt.figure(figsize=(5,4.2))
-    ax = fig.gca(projection='3d')
-    ax.bar3d(X,Y,Z_off,dX,dY,Z, color=(97/255, 252/255, 80/255))  # bar3d has a bug with hex code
-    green_proxy = plt.Rectangle((0, 0), 1, 1, fc=(97/255, 252/255, 80/255))
-    ax.bar3d(x,y,z_off,dx,dy,z,color=(255/255, 51/255, 51/255))
-    red_proxy = plt.Rectangle((0, 0), 1, 1, fc=(255/255, 51/255, 51/255))
-    ax.set_title('Alignment Scores',fontsize=14)
-    ax.legend([green_proxy,red_proxy],['Reads Accepted','Reads Discarded'],loc='upper left',prop={'size':7})
-    ax.set_xticklabels([0,10,20,30,40],fontsize=8)
-    ax.set_yticklabels([0,10,20,30,40],fontsize=8)  
-    ax.set_xlabel('Prim. Alignment Score', fontsize=8)
-    ax.set_ylabel('Sec. Alignment Score', fontsize=8)    
-    formatter = FuncFormatter(millions)
-    ax.zaxis.set_major_formatter(formatter)    
-    ax.tick_params(axis="z", labelsize=8)
-    ax.set_zlabel('Number of Reads',fontsize=8)
-    plt.tight_layout()    
-    plt.savefig(sample+'_AlignmentScores.png',dpi=res)   
-    if svg:
-        plt.savefig(sample+'_AlignmentScores.svg',dpi=res)
+    #fig = plt.figure(figsize=(5,4.2))
+    #ax = fig.gca(projection='3d')
+    #ax.bar3d(X,Y,Z_off,dX,dY,Z, color=(97/255, 252/255, 80/255))  # bar3d has a bug with hex code
+    #green_proxy = plt.Rectangle((0, 0), 1, 1, fc=(97/255, 252/255, 80/255))
+    #ax.bar3d(x,y,z_off,dx,dy,z,color=(255/255, 51/255, 51/255))
+    #red_proxy = plt.Rectangle((0, 0), 1, 1, fc=(255/255, 51/255, 51/255))
+    #ax.set_title('Alignment Scores',fontsize=14)
+    #ax.legend([green_proxy,red_proxy],['Reads Accepted','Reads Discarded'],loc='upper left',prop={'size':7})
+    #ax.set_xticklabels([0,10,20,30,40],fontsize=8)
+    #ax.set_yticklabels([0,10,20,30,40],fontsize=8)
+    #ax.set_xlabel('Prim. Alignment Score', fontsize=8)
+    #ax.set_ylabel('Sec. Alignment Score', fontsize=8)
+    #formatter = FuncFormatter(millions)
+    #ax.zaxis.set_major_formatter(formatter)
+    #ax.tick_params(axis="z", labelsize=8)
+    #ax.set_zlabel('Number of Reads',fontsize=8)
+    #plt.tight_layout()
+    #plt.savefig(sample+'_AlignmentScores.png',dpi=res)
+    #if svg:
+    #    plt.savefig(sample+'_AlignmentScores.svg',dpi=res)
  
     # --------------------------------------
     # Read count acquisition
@@ -275,7 +275,7 @@ def CountReads(sample, config):
     GuideCounts.close()     
     # No-mapping warning
     if sum(ReadsPerGuide) == 0:
-        print('### ERROR: Zero read counts! Check library and alignment ###')    
+        raise ValueError('### ERROR: Zero read counts! Check library and alignment ###')
     end = time.time()
     # Time stamp    
     print('------------------------------------------------')

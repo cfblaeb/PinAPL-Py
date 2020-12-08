@@ -118,4 +118,14 @@ def compute_aRRA(HitList, config):
 		print('### ERROR: Cannot compute aRRA scores without significant sgRNAs! ###')
 		metric = [-1 for k in range(G)]
 		metric_pval = [-1 for k in range(G)]
-	return metric, metric_pval, sig_metric
+
+	sgRNA_series = HitList.groupby('gene')['sgRNA'].count()
+	sgRNA_series.name = '# sgRNAs'
+
+	sig_grnas_per_gene = HitList.groupby('gene')['significant'].sum()
+	sig_grnas_per_gene.name = "# signif. sgRNAs"
+
+	df = DataFrame({'gene': geneList, config['GeneMetric']: metric, 'p_value': metric_pval, 'significant': sig_metric})
+	df = df.merge(sgRNA_series, left_on='gene', right_index=True)
+	df = df.merge(sig_grnas_per_gene, left_on='gene', right_index=True)
+	return df

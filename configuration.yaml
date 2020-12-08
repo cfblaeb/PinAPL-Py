@@ -6,7 +6,7 @@
 # ***********************************************************************
 
 # PROJECT PARAMETERS
-ScreenType: 'enrichment'              # type of screen ['enrichment'/'depletion']
+ScreenType: 'depletion'              # type of screen ['enrichment'/'depletion']
 
 # LIBRARY PARAMETERS
 LibFilename: 'lv_grna.csv'        # filename of library spreadsheet
@@ -15,10 +15,10 @@ NonTargetPrefix: 'NT_'             # prefix for non-targeting sgRNAs in library
 NumGuidesPerGene: 7                     # number of sgRNAs per gene
                                        
 # ANALYSIS OPTIONS
-GeneMetric: 'AvgLogFC'                   # metric for gene ranking ['SigmaFC'/'AvgLogFC'/'aRRA'/'STARS']
+GeneMetric: 'aRRA'                   # metric for gene ranking ['SigmaFC'/'AvgLogFC'/'aRRA'/'STARS']
 padj: 'fdr_bh'                          # method for p-value adjustment ['fdr_bh'/'sidak'/'bonferroni']
 alpha_s: 0.01                            # significance threshold (sgRNAs enrichment/depletion)
-alpha_g: 0.0015                            # significance threshold (gene ranking)
+alpha_g: 0.01                            # significance threshold (gene ranking)
 Normalization: 'total'                    # normalization of read counts ['cpm'/'size'/'total']
 ClusterBy: 'variance'                   # clustering criterion ['variance'/'counts']
 RoundCount: False                       # round counts after normalization [True/False]
@@ -31,9 +31,9 @@ w_SigmaFC: [0,1,2,3,4,5,6]              # weighing function for SigmaFC score
 thr_STARS: 10                           # threshold percentage for STARS analysis
 TopN: 25                                # number of top sgRNAs to take into account for clustering
 ShowNonTargets: True                    # show non-targeting controls in scatterplots [True/False]
-scatter_annotate: False                 # annotate highlighted sgRNAs in scatterplots [True/False]
-IncludeDensityPlots: False              # include sgRNA density plots [True/False]
-AutoHighlight: False                     # automatically highlight the top 10 ranked genes [True/False]
+scatter_annotate: True                 # annotate highlighted sgRNAs in scatterplots [True/False]
+IncludeDensityPlots: True              # include sgRNA density plots [True/False]
+AutoHighlight: True                     # automatically highlight the top 10 ranked genes [True/False]
 
 # TECHNICAL PARAMETERS (changes not required/recommended)
 Cutoff: 0                       # read count threshold
@@ -46,8 +46,8 @@ p_overdisp: 0.05                # significance threshold for overdispersion test
 dotsize: 10                     # size of dots in scatterplot
 TransparencyLevel: 0.05         # transparency (alpha) in scatterplots
 logbase: 10                     # base for log transformation in scatterplots
-AlnOutput: 'Delete'             # keep raw alignment output? ['Keep'/'Compress'/'Delete']
-keepCutReads: False             # keep files containing trimmed reads? [True/False]
+AlnOutput: 'Keep'             # keep raw alignment output? ['Keep'/'Compress'/'Delete']
+keepCutReads: True             # keep files containing trimmed reads? [True/False]
 dpi: 300                        # resolution of PNG plots
 svg: True                       # save figures as vector graphics?  [True/False]
 HitListFormat: 'xlsx'                # format of results spreadsheets ['txt'/'xlsx']
