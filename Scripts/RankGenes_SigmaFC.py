@@ -20,12 +20,10 @@ def compute_SigmaFC(sgRNAList, config):
 	# ------------------------------------------------
 	print('Computing accumulated fold-change scores ...')
 	df = sgRNAList.copy()  # maybe not required....
-	df['log10fc'] = np.log10((df['counts']+config['delta'])/(df['control mean']+config['delta']))
-	df[config['GeneMetric']] = 0
-	df.loc[df.significant, config['GeneMetric']] = df.loc[df.significant, 'log10fc'].apply(lambda y: y * np.exp(-np.log(0.1) * (y - config['FCmin_SigmaFC'])) if y < config['FCmin_SigmaFC'] else y)
-	sgRNA_series = df.groupby('gene')['sgRNA'].count()
-	sgRNA_series.name = '# sgRNAs'
-	df2 = pandas.merge(df.groupby('gene')[config['GeneMetric']].sum(), sgRNA_series, left_index=True, right_index=True)
+	df[config['GeneMetric']] = np.log10((df['counts']+config['delta'])/(df['control mean']+config['delta']))
+	sgRNA_per_gene = df.groupby('gene')['sgRNA'].count()
+	sgRNA_per_gene.name = '# sgRNAs'
+	df2 = pandas.merge(df.groupby('gene')[config['GeneMetric']].sum(), sgRNA_per_gene, left_index=True, right_index=True)
 
 	sig_grnas_per_gene = df.groupby('gene')['significant'].sum()
 	sig_grnas_per_gene.name = "# signif. sgRNAs"
